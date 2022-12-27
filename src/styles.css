@@ -1,0 +1,198 @@
+/*https://www.schemecolor.com/orange-and-blue.php*/
+/*https://www.color-hex.com/color-palette/4955*/
+html {
+  font-size: 62.5%;
+  font-family: Ubuntu, sans-serif;
+  line-height: 1.15;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
+  -webkit-font-smooth: always;
+  -moz-font-smooth: always;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+#root {
+  height: 100%;
+}
+
+.header {
+  padding: 0px 20px;
+  background-color: #0d579b;
+  font-family: Ubuntu, Helvetica, Arial, sans-serif;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+.header .container {
+  margin: 0 auto;
+  max-width: 740px;
+  display: flex;
+  flex-direction: column;
+}
+.header .nav {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.header .nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.6rem;
+  opacity: 0.9;
+}
+.header .nav a:not(:first-of-type)::before {
+  content: '\B7';
+  display: inline-block;
+  margin: 0 1rem;
+  vertical-align: middle;
+  content: '\B7';
+}
+
+.header .brand {
+  display: flex;
+  justify-content: center;
+  --brand-font-size: 5.6rem;
+  font-size: var(--brand-font-size);
+  line-height: 1.35;
+}
+@media (max-width: 500px) {
+  .header .brand {
+    --brand-font-size: 4rem;
+  }
+}
+.header .brand .logo {
+  width: 5.6rem;
+  align-self: center;
+  display: flex;
+  height: 5.6rem;
+  margin-right: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.header .brand .bitcoiner {
+  color: white;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.header .brand .lab {
+  color: #f7931a;
+  font-weight: 600;
+  margin-left: -0.5rem;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fafafa;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.home p {
+  font-weight: 400;
+  max-width: 740px;
+  margin-bottom: 2.8rem;
+  font-size: 1.8rem;
+  line-height: 1.5;
+  text-align: justify;
+  opacity: 0.6;
+}
+
+.about {
+  background-color: #ededed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.about h3 {
+  margin-bottom: 2rem;
+  margin-top: 4rem;
+  font-size: 2.4rem;
+  color: #0d579b;
+  font-weight: 400;
+  font-family: Ubuntu, Helvetica, Arial, sans-serif;
+}
+
+.about .card {
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%),
+    0 1px 5px 0 rgb(0 0 0 / 12%);
+  background: white;
+  border-radius: 0.2rem;
+  margin: 2rem;
+  margin-top: 0;
+  padding: 2rem;
+  max-width: 300px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: 0;
+}
+
+.about h4 {
+  font-size: 2.4rem;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-self: flex-start;
+}
+.about h5 {
+  color: #757575;
+  font-size: 1.4rem;
+  margin: 0;
+  display: flex;
+  align-self: flex-start;
+  margin-bottom: 2rem;
+}
+
+.about p {
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  text-align: justify;
+  align-self: flex-start;
+  opacity: 0.6;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.about a.social svg {
+  height: 2rem;
+  vertical-align: middle;
+}
+
+.about .socialButtons {
+  margin-top: 2rem;
+}
+
+.about a.social {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  vertical-align: middle;
+}
+.about a.social.twitter {
+  color: #55acee;
+  margin-right: 1rem;
+}
+.about a.social.github {
+  color: black;
+  margin-left: 1rem;
+}
+.about a.social::before {
+  height: 2rem;
+  width: 2rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
