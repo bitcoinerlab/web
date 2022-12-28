@@ -1,26 +1,27 @@
 {
   "name": "BitcoinerLAB Web",
-  "author": "Jose-Luis Landabaso <landabaso@gmail.com>",
-  "description": "BitcoinerLAB Web",
-  "version": "1.0.0",
   "author": {
     "name": "José-Luis Landabaso",
     "email": "landabaso@gmail.com",
     "url": "https://bitcoinerlab.com"
   },
+  "description": "BitcoinerLAB Web",
+  "version": "1.0.0",
   "homepage": "https://bitcoinerlab.com",
   "license": "MIT",
   "scripts": {
     "devel": "concurrently \"npm run build:client\" \"npm run serve:dev\"",
     "build": "concurrently \"npm run build:client\" && \"npm run build:server\"",
     "serve:prod": "pm2 start dist/server.bundle.js",
-
     "build:client": "rollup -c rollup.config.client.js -w --bundleConfigAsCjs",
     "build:server": "rollup -c rollup.config.server.js -w --bundleConfigAsCjs",
     "serve:dev": "npx nodemon --watch dist/public/bundle.js --exec babel-node src/server.entry.js"
   },
   "babel": {
-    "presets": ["@babel/preset-env", "@babel/preset-react"]
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
   },
   "devDependencies": {
     "@babel/node": "^7.20.7",
@@ -42,6 +43,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.5"
+    "react-router-dom": "^6.4.5",
+    "react-runkit": "github:veksen/react-runkit"
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Link } from 'react-router-dom';
 import Nav from './nav';
+import Miniscript from './miniscript';
 
 const Modules = () => (
   <div className="modules">
@@ -8,63 +9,182 @@ const Modules = () => (
     <article>
       <Routes>
         <Route
-          path=""
+          path="/"
           element={
             <div>
-              Parent
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                The <Link to="/modules/miniscript">Miniscript module</Link> has
+                already been implemented which provides a simple way to describe
+                and work with complex Bitcoin scripts.
+              </p>
+              <p>
+                Several other modules are in the final stages of development.
+                These include:
+              </p>
+              <ul>
+                <li>
+                  <Link to="/modules/descriptors">Descriptors</Link>, which
+                  enables the expression of complex wallet structures such as
+                  multi-sig or timelocks.
+                </li>
+                <li>
+                  <Link to="/modules/discovery">Discovery</Link>, which allows
+                  for the retrieval of funds from Bitcoin nodes.
+                </li>
+                <li>
+                  <Link to="/modules/explorer">Explorer</Link>, which provides
+                  access to Electrum and Esplora servers.
+                </li>
+                <li>
+                  <Link to="/modules/hdsigner">HDSigner</Link>, which enables
+                  hierarchical deterministic signing with software and hardware
+                  devices like Ledger Nano.
+                </li>
+                <li>
+                  <Link to="/modules/coinselect">Coinselect</Link>, which helps
+                  in the selection of utxos.
+                </li>
+                <li>
+                  <Link to="/modules/fees">Fees</Link>, which estimates
+                  transaction fees.
+                </li>
+                <li>
+                  <Link to="/modules/transactions">Transactions</Link>, which
+                  constructs and signs transactions.
+                </li>
+              </ul>
+              <p>
+                Together, these modules make it easier to develop Bitcoin
+                applications.
+              </p>
+            </div>
+          }
+        ></Route>
+        <Route path="/miniscript" element={<Miniscript />}></Route>
+        <Route
+          path="/descriptors"
+          element={
+            <div>
+              <h3>Descriptors</h3>
+              <p>
+                This module provides an easy way to express complex wallet
+                structures such as multi-sig or timelocks.
+              </p>
+              <p>
+                It is currently in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/descriptors/src/descriptors.js">
+                  src/descriptors.js
+                </a>
               </p>
             </div>
           }
         ></Route>
         <Route
-          path="miniscript"
+          path="/discovery"
           element={
             <div>
-              <h3>@bitcoinerlab/miniscript</h3>
+              <h3>Discovery</h3>
               <p>
-                This module provides a Bitcoin miniscript compiler and
-                satisfyer.
-              </p>
-            </div>
-          }
-        ></Route>
-        <Route
-          path="descriptors"
-          element={
-            <div>
-              <h3>@bitcoinerlab/descriptors</h3>
-              <p>
-                This module provides an easy way to express complex scripts.
-              </p>
-            </div>
-          }
-        ></Route>
-        <Route
-          path="discovery"
-          element={
-            <div>
-              <h3>@bitcoinerlab/discovery</h3>
-              <p>
-                This module allows you to retrieve funds from the blockchain
+                This module allows for the retrieval of funds from Bitcoin
                 nodes.
               </p>
+              <p>
+                It is still in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/discovery.js">
+                  src/discovery.js
+                </a>
+              </p>
+            </div>
+          }
+        ></Route>
+
+        <Route
+          path="/explorer"
+          element={
+            <div>
+              <h3>Explorer</h3>
+              <p>
+                This module provides access to Electrum and Esplora servers.
+              </p>
+              <p>
+                It is still in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/explorer">
+                  src/explorer
+                </a>
+              </p>
+            </div>
+          }
+        ></Route>
+
+        <Route
+          path="/hdsigner"
+          element={
+            <div>
+              <h3>HDSigner</h3>
+              <p>
+                This module enables hierarchical deterministic signing with
+                software and hardware devices like Ledger Nano.
+              </p>
+              <p>
+                It is still in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/tree/main/src/HDSigner">
+                  src/HDSigner
+                </a>
+              </p>
+            </div>
+          }
+        ></Route>
+
+        <Route
+          path="/coinselect"
+          element={
+            <div>
+              <h3>Coinselect</h3>
+              <p>This module helps in the selection of utxos.</p>
+              <p>
+                It is still in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/coinselect.js">
+                  src/coinselect.js
+                </a>
+              </p>
+            </div>
+          }
+        ></Route>
+
+        <Route
+          path="/fees"
+          element={
+            <div>
+              <h3>Fees</h3>
+              <p>This module estimates transaction fees.</p>
+              <p>
+                It is still in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/fees.js">
+                  src/fees.js
+                </a>
+              </p>
             </div>
           }
         ></Route>
         <Route
-          path="explorer"
+          path="/transactions"
           element={
             <div>
-              <h3>@bitcoinerlab/explorer</h3>
-              <p>This module provides Electrum and Esplora clients.</p>
+              <h3>Transactions</h3>
+              <p>This module constructs and signs transactions.</p>
+              <p>
+                It is still in development and not yet ready for use in
+                production, but you can preview it on Github:{' '}
+                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/transactions.js">
+                  src/transactions.js
+                </a>
+              </p>
             </div>
           }
         ></Route>

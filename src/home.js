@@ -1,51 +1,59 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Home = () => (
-  <>
-    <section className="home">
-      <p>
-        BitcoinerLAB is a set of Javascript modules that allow creating Bitcoin
-        wallets. So far <code>@bitcoinerlab/miniscript</code> is already
-        implemented. And new modules are coming including{' '}
-        <code>@bitcoinerlab/descriptors</code> (an easy way to express complex
-        scripts), <code>@bitcoinerlab/discovery</code> (to retrieve funds from
-        the blockchain nodes), <code>@bitcoinerlab/explorer</code> (Electrum and
-        Esplora clients).
-      </p>
-      <p>
-        All these modules have been developed while creating the{' '}
-        <a href="https://github.com/farvault/">FarVault</a>. FarVault is a A
-        javascript Bitcoin cold storage time-lock wallet for Node.js, browsers
-        and React-Native compatible. Since this is convenient code, it was
-        decided to share them to the community.
-      </p>
-    </section>
-    <section className="about">
-      <h3>About the author</h3>
-      <div className="card">
-        <img src="https://github.com/landabaso.png" alt="Jose-Luis Landabaso" />
-        <h4>Jose-Luis Landabaso</h4>
-        <h5>@landabaso</h5>
-        <p>Telecom Eng. PhD in Signal Processing.</p>
+const Home = () => {
+  const navigate = useNavigate();
+  const handleTryNow = () => navigate('/modules/miniscript');
+  return (
+    <>
+      <section className="home">
         <p>
-          Bitcoin dev building{' '}
-          <a href="https://github.com/farvault/">FarVault</a>, a cold storage
-          time-lock wallet that helps protect users from coin theft & extortion.
-          <br />
-          I'm also the guy behind{' '}
-          <a href="https://labolsavirtual.com/">LaBolsaVirtual.com</a>.
+          BitcoinerLAB simplifies the development process for developers by
+          providing a set of Javascript modules that enable the creation of
+          Bitcoin applications.
         </p>
-        <div className="socialButtons">
-          <a className="social twitter" href="https://twitter.com/landabaso">
-            TWITTER
-          </a>
-          <a className="social github" href="https://github.com/landabaso">
-            GITHUB
-          </a>
+        <button onClick={handleTryNow}>Try it now!</button>
+        <p>
+          The development of these modules began while creating{' '}
+          <a href="https://github.com/bitcoinerlab/farvault-lib">FarVault</a>, a
+          Javascript Bitcoin cold storage time-lock wallet. These modules have
+          already been implemented in some form, but are now being refactored
+          for better modularization and reuse. The goal is to share these
+          modules with the community to facilitate the development of other
+          Bitcoin applications and wallets.
+        </p>
+      </section>
+      <section className="about">
+        <h3>About the author</h3>
+        <div className="card">
+          <img
+            src="https://github.com/landabaso.png"
+            alt="Jose-Luis Landabaso"
+          />
+          <h4>Jose-Luis Landabaso</h4>
+          <h5>@landabaso</h5>
+          <p>Telecom Eng. PhD in Computer Vision.</p>
+          <p>
+            Bitcoin dev building{' '}
+            <a href="https://github.com/bitcoinerlab/farvault-lib">FarVault</a>,
+            a cold storage time-lock wallet that helps protect users from coin
+            theft & extortion.
+            <br />
+            I'm also the guy behind{' '}
+            <a href="https://labolsavirtual.com/">LaBolsaVirtual.com</a>.
+          </p>
+          <div className="socialButtons">
+            <a className="social twitter" href="https://twitter.com/landabaso">
+              TWITTER
+            </a>
+            <a className="social github" href="https://github.com/landabaso">
+              GITHUB
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
-  </>
-);
+      </section>
+    </>
+  );
+};
 
 export default Home;

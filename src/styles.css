@@ -5,6 +5,10 @@ html {
   font-family: Ubuntu, sans-serif;
   line-height: 1.15;
 }
+a {
+  color: #0d579b;
+  text-decoration: none;
+}
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -18,17 +22,48 @@ body {
   flex-direction: column;
   height: 100vh;
 }
-#root {
-  height: 100%;
-}
-
 .header {
   padding: 0px 20px;
   background-color: #0d579b;
   font-family: Ubuntu, Helvetica, Arial, sans-serif;
   padding-top: 50px;
   padding-bottom: 50px;
+  position: relative;
+  z-index: 1;
 }
+#root {
+  position: relative;
+  flex: 1; /* take up remaining space in the body */
+  overflow-y: auto; /* add scrolling to the div */
+  z-index: 0;
+  /*height: 100%;*/
+}
+
+button {
+  background-color: #f7931a;
+  color: white;
+  text-transform: uppercase;
+  font-family: Ubuntu, Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 3.6rem;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%),
+    0 1px 5px 0 rgb(0 0 0 / 12%);
+  min-width: 9rem;
+  padding: 0 1.2rem;
+  padding-top: 0px;
+  padding-right: 1.2rem;
+  padding-bottom: 0px;
+  padding-left: 1.2rem;
+  border-radius: 0.2rem;
+}
+
 .header .container {
   margin: 0 auto;
   max-width: 740px;
@@ -47,14 +82,18 @@ body {
   opacity: 0.9;
 }
 .header .nav a:not(:first-of-type)::before {
-  content: '\B7';
   display: inline-block;
   margin: 0 1rem;
   vertical-align: middle;
   content: '\B7';
 }
+.header .nav a.selected {
+  text-decoration: underline;
+  text-underline-offset: 1rem;
+}
 
 .header .brand {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   --brand-font-size: 5.6rem;
@@ -73,6 +112,25 @@ body {
   height: 5.6rem;
   margin-right: 1rem;
   background-color: rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease-in-out; /* Add a transition effect for the transform property for the hover*/
+  animation: logoRotate 1s ease-in-out 0.5s; /* Add an animation for the rotate effect 0.5 second after the page is load with a duration of 1 second */
+}
+@keyframes logoRotate {
+  /* Define the keyframes for the rotate effect */
+  0% {
+    transform: rotate(0deg); /* Start at 0 degrees */
+  }
+  50% {
+    transform: rotate(13.88deg); /* Rotate to 13.88 degrees at 50% */
+  }
+  100% {
+    transform: rotate(0deg); /* Return to 0 degrees at 100% */
+  }
+}
+.header .brand .logo:hover {
+  transform: rotate(
+    13.88deg
+  ); /* Rotate the element by 30 degrees to the right on hover */
 }
 .header .brand .bitcoiner {
   color: white;
@@ -136,6 +194,10 @@ body {
   overflow: hidden;
   padding-top: 0;
 }
+.about .card img {
+  width: 348px;
+  height: 348px;
+}
 
 .about h4 {
   font-size: 2.4rem;
@@ -194,5 +256,3 @@ body {
   display: inline-block;
   vertical-align: middle;
 }
-
-
