@@ -110,9 +110,19 @@ const Miniscript = () => {
       policies[0].unknowns
     )
   );
+  const [runkitHeight, setRunkitHeight] = useState(130);
+
+  //The parent div
+  const runkitRef = useRef(null);
+  //The runkit itself
   const embedRef = useRef(null);
 
   const run = () => embedRef.current.evaluate();
+
+  const runkitEvaluated = () => {
+    //Keep the largest height so that it does not flicker
+    setRunkitHeight(runkitRef.current.offsetHeight);
+  };
 
   return (
     <div>
@@ -158,12 +168,17 @@ const Miniscript = () => {
           run();
         }}
       />
-      <div className="runkit">
+      <div
+        className="runkit"
+        ref={runkitRef}
+        style={{ minHeight: runkitHeight + 'px' }}
+      >
         <Embed
           gutterStyle="inside"
           source={source}
           ref={embedRef}
           onLoad={run}
+          onEvaluate={runkitEvaluated}
         />
       </div>
     </div>

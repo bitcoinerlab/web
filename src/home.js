@@ -8,9 +8,9 @@ const Home = () => {
     <>
       <section className="home">
         <p>
-          BitcoinerLAB simplifies the development process for developers by
-          providing a set of Javascript modules that enable the creation of
-          Bitcoin applications.
+          BitcoinerLAB simplifies the Bitcoin development process by providing a
+          set of Javascript modules that enable the creation of Bitcoin
+          applications.
         </p>
         <button onClick={handleTryNow}>Try it now!</button>
         <p>

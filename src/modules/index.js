@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import Nav from './nav';
 import Miniscript from './miniscript';
+import NotFound from '../notfound';
 
 const Modules = () => (
   <div className="modules">
@@ -188,6 +189,7 @@ const Modules = () => (
             </div>
           }
         ></Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </article>
   </div>

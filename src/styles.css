@@ -21,6 +21,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-height: -webkit-fill-available; /* For iOS devices blocking the bottom: https://allthingssmitty.com/2020/05/11/css-fix-for-100vh-in-mobile-webkit/ */
 }
 .header {
   padding: 0px 20px;
@@ -37,6 +38,14 @@ body {
   overflow-y: auto; /* add scrolling to the div */
   z-index: 0;
   /*height: 100%;*/
+}
+
+article.notfound {
+  min-width: 300px;
+  max-width: 760px;
+  padding: 2rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
 }
 
 button {

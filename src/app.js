@@ -3,13 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './home';
 import Modules from './modules';
 import { NavLink, useNavigate } from 'react-router-dom';
-const NotFound = () => {
-  // on the server
-  if (typeof process !== 'undefined') {
-    process.env.statusCode = 404;
-  }
-  return <div>Not found</div>;
-};
+import NotFound from './notfound';
+
 const App = () => {
   const navigate = useNavigate();
   const handleBrandClick = () => navigate('/');
@@ -18,7 +13,35 @@ const App = () => {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>BitcoinerLAB</title>
+        <Routes>
+          <Route
+            path="/"
+            exact
+            element={
+              <>
+                <title>BitcoinerLAB</title>
+                <meta
+                  name="description"
+                  content="BitcoinerLAB simplifies the Bitcoin development process by providing a set of Javascript modules that enable the creation of Bitcoin applications."
+                />
+              </>
+            }
+          />
+          <Route
+            path="/modules/miniscript"
+            exact
+            element={
+              <>
+                <title>Miniscript</title>
+                <meta
+                  name="description"
+                  content="A JavaScript implementation of Bitcoin Miniscript, a high-level language for describing Bitcoin spending conditions."
+                />
+              </>
+            }
+          />
+          <Route path="*" element={<title>BitcoinerLAB</title>} />
+        </Routes>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link
           rel="stylesheet"
