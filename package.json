@@ -10,18 +10,20 @@
   "homepage": "https://bitcoinerlab.com",
   "license": "MIT",
   "scripts": {
-    "devel": "concurrently \"npm run build:client\" \"npm run serve:dev\"",
-    "build": "concurrently \"npm run build:client\" && \"npm run build:server\"",
-    "serve:prod": "pm2 start dist/server.bundle.js",
+    "start": "concurrently --kill-others-on-fail 'npm run build' 'npm run serve'",
+
+    "build": "concurrently --kill-others-on-fail 'npm run build:client' 'npm run build:server'",
     "build:client": "rollup -c rollup.config.client.js -w --bundleConfigAsCjs",
     "build:server": "rollup -c rollup.config.server.js -w --bundleConfigAsCjs",
-    "serve:dev": "npx nodemon --watch dist/public/bundle.js --exec babel-node src/server.entry.js"
+    "serve": "npx nodemon --watch dist/public/bundle.js --exec babel-node src/server.entry.js",
+
+    "build:prod": "npm run build:client:prod && npm run build:server:prod",
+    "build:client:prod": "NODE_ENV=production rollup -c rollup.config.client.js --bundleConfigAsCjs",
+    "build:server:prod": "NODE_ENV=production rollup -c rollup.config.server.js --bundleConfigAsCjs",
+    "serve:prod": "pm2 start dist/server.bundle.js"
   },
   "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ]
+    "presets": ["@babel/preset-env", "@babel/preset-react"]
   },
   "devDependencies": {
     "@babel/node": "^7.20.7",

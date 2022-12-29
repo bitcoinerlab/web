@@ -23,7 +23,7 @@ const App = () => {
         <link
           rel="stylesheet"
           type="text/css"
-          href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin"
+          href="https://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin"
         />
         <link rel="stylesheet" href="/styles.css" />
         <script src="https://embed.runkit.com"></script>

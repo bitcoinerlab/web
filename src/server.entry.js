@@ -20,5 +20,7 @@ app.get('*', (req, res) => {
     .send('<!DOCTYPE html>' + html);
   delete process.env.statusCode;
 });
-
-app.listen(3000);
+const port = 3101;
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});

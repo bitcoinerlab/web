@@ -1,5 +1,3 @@
-const NODE_ENV = JSON.stringify('development');
-
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
@@ -16,7 +14,7 @@ export default {
   },
   plugins: [
     replace({
-      'process.env.NODE_ENV': NODE_ENV
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
     resolve(),
     babel({
