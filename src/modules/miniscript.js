@@ -133,8 +133,8 @@ const Miniscript = () => {
         high-level language for describing Bitcoin spending conditions.
       </p>
       <p>
-        It includes a novel Miniscript Satisfier for generating explicit witness
-        scripts that are decoupled from the tx signer, as well as a
+        It includes a novel Miniscript Satisfier for generating explicit script
+        witnesses that are decoupled from the tx signer, as well as a
         transpilation of{' '}
         <a href="https://github.com/sipa/miniscript">Peter Wuille's C++ code</a>{' '}
         for compiling spending policies into Miniscript and Bitcoin scripts.
@@ -144,7 +144,7 @@ const Miniscript = () => {
         <li>Compile Policies into Miniscript and Bitcoin scripts.</li>
         <li>
           A Miniscript Satisfier that discards malleable solutions and is able
-          to generate explicit witness scripts from Miniscripts using variables,
+          to generate explicit witnesses from Miniscripts using variables,
           such as <code>pk(key)</code>.
         </li>
       </ul>
