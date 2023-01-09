@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import Nav from './nav';
 import Miniscript from './miniscript';
+import Secp256k1 from './secp256k1';
 import NotFound from '../notfound';
 
 const Modules = () => (
@@ -13,11 +14,18 @@ const Modules = () => (
           path="/"
           element={
             <div>
-              <p>
-                The <Link to="/modules/miniscript">Miniscript module</Link> has
-                already been implemented which provides a simple way to describe
-                and work with complex Bitcoin scripts.
-              </p>
+              <p>Some modules have already been implemented and published.</p>
+              <ul>
+                <li>
+                  <Link to="/modules/miniscript">Miniscript</Link>, which
+                  provides a simple way to describe and work with complex
+                  Bitcoin scripts.
+                </li>
+                <li>
+                  <Link to="/modules/secp256k1">Secp256k1</Link>, for elliptic
+                  curve operations on the secp256k1 curve.
+                </li>
+              </ul>
               <p>
                 Several other modules are in the final stages of development.
                 These include:
@@ -62,6 +70,7 @@ const Modules = () => (
           }
         ></Route>
         <Route path="/miniscript" element={<Miniscript />}></Route>
+        <Route path="/secp256k1" element={<Secp256k1 />}></Route>
         <Route
           path="/descriptors"
           element={

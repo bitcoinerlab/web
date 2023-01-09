@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 const Nav = () => {
   const links = [
     { path: '/modules/miniscript', label: 'Miniscript' },
+    { path: '/modules/secp256k1', label: 'Secp256k1' },
     { path: '/modules/descriptors', label: 'Descriptors' },
     { path: '/modules/discovery', label: 'Discovery' },
     { path: '/modules/explorer', label: 'Explorer' },
