@@ -20,7 +20,8 @@
     "build:prod": "npm run build:client:prod && npm run build:server:prod",
     "build:client:prod": "NODE_ENV=production rollup -c rollup.config.client.js --bundleConfigAsCjs",
     "build:server:prod": "NODE_ENV=production rollup -c rollup.config.server.js --bundleConfigAsCjs",
-    "serve:prod": "pm2 start dist/server.bundle.js"
+    "serve:prod": "pm2 start dist/server.bundle.js",
+    "upload": "scp -r dist bitcoinerlab@ithaca:bitcoinerlab.com/"
   },
   "babel": {
     "presets": ["@babel/preset-env", "@babel/preset-react"]
