@@ -78,7 +78,7 @@ const { miniscript, asm, issane } = compilePolicy(policy);
 if (issane) {
   const { nonMalleableSats, malleableSats${
     unknowns.length ? ', unknownSats' : ''
-  } } = satisfier( miniscript${unknowns.length ? ', unknowns' : ''} );
+  } } = satisfier( miniscript${unknowns.length ? ', { unknowns }' : ''} );
   ({ miniscript, asm, nonMalleableSats, malleableSats${
     unknowns.length ? ', unknownSats' : ''
   } }); //Show results
