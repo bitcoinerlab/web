@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Embed from 'react-runkit';
 
 const policies = [
@@ -111,6 +111,12 @@ const Miniscript = () => {
     )
   );
   const [runkitHeight, setRunkitHeight] = useState(130);
+  //This is when the RunKit script has been laoded is ready for commands:
+  const [runkitScriptLoaded, setRunkitScriptLoaded] = useState(
+    typeof window !== 'undefined' && window.RunKit
+  );
+  //This is when the RunKit engine is ready for commands:
+  const [runkitReady, setRunkitReady] = useState(false);
 
   //The parent div
   const runkitRef = useRef(null);
@@ -118,15 +124,28 @@ const Miniscript = () => {
   const embedRef = useRef(null);
 
   const run = () => embedRef.current.evaluate();
+  const onLoad = () => {
+    setRunkitReady(true);
+    run();
+  };
 
   const runkitEvaluated = () => {
     //Keep the largest height so that it does not flicker
     setRunkitHeight(runkitRef.current.offsetHeight);
   };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !runkitScriptLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://embed.runkit.com';
+      script.async = true;
+      script.onload = () => setRunkitScriptLoaded(true);
+      document.body.appendChild(script);
+    }
+  }, []);
   return (
     <div>
-      <h3>Miniscript</h3>
+      <h1>Miniscript</h1>
       <p>
         This project is a JavaScript implementation of{' '}
         <a href="https://bitcoin.sipa.be/miniscript/">Bitcoin Miniscript</a>, a
@@ -139,16 +158,16 @@ const Miniscript = () => {
         <a href="https://github.com/sipa/miniscript">Peter Wuille's C++ code</a>{' '}
         for compiling spending policies into Miniscript and Bitcoin scripts.
       </p>
-      <h4>Features</h4>
+      <h2>Features</h2>
       <ul>
         <li>Compile Policies into Miniscript and Bitcoin scripts.</li>
         <li>
           A Miniscript Satisfier that discards malleable solutions and is able
-          to generate explicit witnesses from Miniscripts using variables,
-          such as <code>pk(key)</code>.
+          to generate explicit witnesses from Miniscripts using variables, such
+          as <code>pk(key)</code>.
         </li>
       </ul>
-      <h4>Documentation</h4>
+      <h2>Documentation</h2>
       <p>
         This module has detailed documentation available on{' '}
         <a href="https://github.com/bitcoinerlab/miniscript">
@@ -157,15 +176,17 @@ const Miniscript = () => {
         . In addition, you can use the playground on this page to experiment
         with the module and try out its features.
       </p>
-      <h4>Playground</h4>
+      <h2>Playground</h2>
       Let's consider the policies used for demonstration in{' '}
       <a href="https://bitcoin.sipa.be/miniscript/">Wuille's paper</a> and add
       some more that include unknown pieces of information (referred to as{' '}
       <code>unknowns</code>).
       <WuillesDemos
         setSource={source => {
-          setSource(source);
-          run();
+          if (runkitReady) {
+            setSource(source);
+            run();
+          }
         }}
       />
       <div
@@ -173,13 +194,16 @@ const Miniscript = () => {
         ref={runkitRef}
         style={{ minHeight: runkitHeight + 'px' }}
       >
-        <Embed
-          gutterStyle="inside"
-          source={source}
-          ref={embedRef}
-          onLoad={run}
-          onEvaluate={runkitEvaluated}
-        />
+        {!runkitReady && <div>Loading Playground environment...</div>}
+        {runkitScriptLoaded && (
+          <Embed
+            gutterStyle="inside"
+            source={source}
+            ref={embedRef}
+            onLoad={onLoad}
+            onEvaluate={runkitEvaluated}
+          />
+        )}
       </div>
     </div>
   );

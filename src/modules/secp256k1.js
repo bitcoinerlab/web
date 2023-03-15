@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Embed from 'react-runkit';
 
 const source = `const ecc = require('@bitcoinerlab/secp256k1');
@@ -19,22 +19,38 @@ const node = BIP32.fromBase58(
 
 const Secp256k1 = () => {
   const [runkitHeight, setRunkitHeight] = useState(130);
+  const [runkitScriptLoaded, setRunkitScriptLoaded] = useState(
+    typeof window !== 'undefined' && window.RunKit
+  );
+  const [runkitReady, setRunkitReady] = useState(false);
 
   //The parent div
   const runkitRef = useRef(null);
   //The runkit itself
   const embedRef = useRef(null);
 
-  const run = () => embedRef.current.evaluate();
+  const onLoad = () => {
+    setRunkitReady(true);
+    embedRef.current.evaluate();
+  };
 
   const runkitEvaluated = () => {
     //Keep the largest height so that it does not flicker
     setRunkitHeight(runkitRef.current.offsetHeight);
   };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !runkitScriptLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://embed.runkit.com';
+      script.async = true;
+      script.onload = () => setRunkitScriptLoaded(true);
+      document.body.appendChild(script);
+    }
+  }, []);
   return (
     <div>
-      <h3>Secp256k1</h3>
+      <h1>Secp256k1</h1>
       <p>
         This project is a Javascript library for performing elliptic curve
         operations on the secp256k1 curve. It is designed to integrate into the{' '}
@@ -50,7 +66,7 @@ const Secp256k1 = () => {
         This library is compatible with environments that do not support
         WebAssembly, such as React Native.
       </p>
-      <h4>Features</h4>
+      <h2>Features</h2>
       <ul>
         <li>
           Compatible with BitcoinJS{' '}
@@ -77,7 +93,7 @@ const Secp256k1 = () => {
           .
         </li>
       </ul>
-      <h4>Documentation</h4>
+      <h2>Documentation</h2>
       <p>
         This module has detailed documentation available on{' '}
         <a href="https://github.com/bitcoinerlab/secp256k1">
@@ -86,20 +102,23 @@ const Secp256k1 = () => {
         . In addition, you can use the playground below to experiment with the
         module and try out its features.
       </p>
-      <h4>Playground</h4>
+      <h2>Playground</h2>
       <div
         className="runkit"
         ref={runkitRef}
         style={{ minHeight: runkitHeight + 'px' }}
       >
-        <Embed
-          gutterStyle="inside"
-          source={source}
-          ref={embedRef}
-          onLoad={run}
-          onEvaluate={runkitEvaluated}
-          nodeVersion=">=12"
-        />
+        {!runkitReady && <div>Loading Playground environment...</div>}
+        {runkitScriptLoaded && (
+          <Embed
+            gutterStyle="inside"
+            source={source}
+            ref={embedRef}
+            onLoad={onLoad}
+            onEvaluate={runkitEvaluated}
+            nodeVersion=">=12"
+          />
+        )}
       </div>
     </div>
   );

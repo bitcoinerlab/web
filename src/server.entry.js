@@ -10,7 +10,7 @@ let app = express();
 app.use(express.static('dist/public'));
 
 app.get('*', (req, res) => {
-  let html = ReactDOMServer.renderToString(
+  const html = ReactDOMServer.renderToString(
     <StaticRouter location={req.url}>
       <App />
     </StaticRouter>

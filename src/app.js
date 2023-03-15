@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './home';
 import Modules from './modules';
+import Guides from './guides';
 import { NavLink, useNavigate } from 'react-router-dom';
 import NotFound from './notfound';
 
@@ -48,8 +49,12 @@ const App = () => {
           type="text/css"
           href="https://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin"
         />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto%20Mono"
+        />
         <link rel="stylesheet" href="/styles.css" />
-        <script src="https://embed.runkit.com"></script>
       </head>
       <body>
         <header className="header">
@@ -76,6 +81,14 @@ const App = () => {
               >
                 Modules
               </NavLink>
+              <NavLink
+                to="/guides"
+                className={({ isActive }) =>
+                  isActive ? 'selected' : undefined
+                }
+              >
+                Guides
+              </NavLink>
               <a href="https://github.com/bitcoinerlab">Github</a>
             </nav>
           </div>
@@ -84,6 +97,7 @@ const App = () => {
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/modules/*" element={<Modules />} />
+            <Route path="/guides/*" element={<Guides />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

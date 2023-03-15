@@ -1,12 +1,13 @@
 import React from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import Nav from './nav';
+import Descriptors from './descriptors';
 import Miniscript from './miniscript';
 import Secp256k1 from './secp256k1';
 import NotFound from '../notfound';
 
 const Modules = () => (
-  <div className="modules">
+  <div className="nav-article">
     <Nav />
     <article>
       <Routes>
@@ -14,8 +15,15 @@ const Modules = () => (
           path="/"
           element={
             <div>
+              <h1>Modules</h1>
               <p>Some modules have already been implemented and published.</p>
               <ul>
+                <li>
+                  <Link to="/modules/descriptors">Descriptors</Link>, which
+                  enables parsing and signing complex wallet structures such as
+                  multi-sig or timelocks. It allows signing with Software and
+                  some Hardware Wallets.
+                </li>
                 <li>
                   <Link to="/modules/miniscript">Miniscript</Link>, which
                   provides a simple way to describe and work with complex
@@ -32,22 +40,12 @@ const Modules = () => (
               </p>
               <ul>
                 <li>
-                  <Link to="/modules/descriptors">Descriptors</Link>, which
-                  enables the expression of complex wallet structures such as
-                  multi-sig or timelocks.
-                </li>
-                <li>
                   <Link to="/modules/discovery">Discovery</Link>, which allows
                   for the retrieval of funds from Bitcoin nodes.
                 </li>
                 <li>
                   <Link to="/modules/explorer">Explorer</Link>, which provides
                   access to Electrum and Esplora servers.
-                </li>
-                <li>
-                  <Link to="/modules/hdsigner">HDSigner</Link>, which enables
-                  hierarchical deterministic signing with software and hardware
-                  devices like Ledger Nano.
                 </li>
                 <li>
                   <Link to="/modules/coinselect">Coinselect</Link>, which helps
@@ -57,10 +55,6 @@ const Modules = () => (
                   <Link to="/modules/fees">Fees</Link>, which estimates
                   transaction fees.
                 </li>
-                <li>
-                  <Link to="/modules/transactions">Transactions</Link>, which
-                  constructs and signs transactions.
-                </li>
               </ul>
               <p>
                 Together, these modules make it easier to develop Bitcoin
@@ -69,27 +63,9 @@ const Modules = () => (
             </div>
           }
         ></Route>
+        <Route path="/descriptors" element={<Descriptors />}></Route>
         <Route path="/miniscript" element={<Miniscript />}></Route>
         <Route path="/secp256k1" element={<Secp256k1 />}></Route>
-        <Route
-          path="/descriptors"
-          element={
-            <div>
-              <h3>Descriptors</h3>
-              <p>
-                This module provides an easy way to express complex wallet
-                structures such as multi-sig or timelocks.
-              </p>
-              <p>
-                It is currently in development and not yet ready for use in
-                production, but you can preview it on Github:{' '}
-                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/descriptors/src/descriptors.js">
-                  src/descriptors.js
-                </a>
-              </p>
-            </div>
-          }
-        ></Route>
         <Route
           path="/discovery"
           element={
@@ -128,27 +104,6 @@ const Modules = () => (
             </div>
           }
         ></Route>
-
-        <Route
-          path="/hdsigner"
-          element={
-            <div>
-              <h3>HDSigner</h3>
-              <p>
-                This module enables hierarchical deterministic signing with
-                software and hardware devices like Ledger Nano.
-              </p>
-              <p>
-                It is still in development and not yet ready for use in
-                production, but you can preview it on Github:{' '}
-                <a href="https://github.com/bitcoinerlab/farvault-lib/tree/main/src/HDSigner">
-                  src/HDSigner
-                </a>
-              </p>
-            </div>
-          }
-        ></Route>
-
         <Route
           path="/coinselect"
           element={
@@ -177,22 +132,6 @@ const Modules = () => (
                 production, but you can preview it on Github:{' '}
                 <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/fees.js">
                   src/fees.js
-                </a>
-              </p>
-            </div>
-          }
-        ></Route>
-        <Route
-          path="/transactions"
-          element={
-            <div>
-              <h3>Transactions</h3>
-              <p>This module constructs and signs transactions.</p>
-              <p>
-                It is still in development and not yet ready for use in
-                production, but you can preview it on Github:{' '}
-                <a href="https://github.com/bitcoinerlab/farvault-lib/blob/main/src/transactions.js">
-                  src/transactions.js
                 </a>
               </p>
             </div>

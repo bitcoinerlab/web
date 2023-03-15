@@ -3,13 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 const Nav = () => {
   const links = [
-    { path: '/modules/descriptors', label: 'Descriptors' },
-    { path: '/modules/miniscript', label: 'Miniscript' },
-    { path: '/modules/secp256k1', label: 'Secp256k1' },
-    { path: '/modules/discovery', label: 'Discovery' },
-    { path: '/modules/explorer', label: 'Explorer' },
-    { path: '/modules/coinselect', label: 'Coinselect' },
-    { path: '/modules/fees', label: 'Fees' }
+    { path: '/guides/standard-transactions', label: 'Standard Transactions' },
+    //{ path: '/guides/miniscript', label: 'Descriptors & Miniscript' },
+    { path: '/guides/ledger-programming', label: 'Programming a Ledger Nano' }
   ];
 
   return (

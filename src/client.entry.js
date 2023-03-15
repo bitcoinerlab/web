@@ -7,7 +7,9 @@ import App from './app';
 //do the imports here (not on server.entry.js)
 import './styles.css';
 import './icons.css';
-import './modules/modules.css';
+import './nav-article.css'; //For guides and modules
+import './guides/theme.css'; //For codesandbox
+//import 'highlight.js/styles/default.css'; //For react-markdown (the readme.md parser)
 
 hydrateRoot(
   document,

@@ -1,0 +1,92 @@
+.nav-article {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.nav-article nav {
+  --guides-nav-width: 160px;
+  overflow-y: auto;
+  width: var(--guides-nav-width);
+  box-shadow: 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%),
+    0 2px 4px -1px rgb(0 0 0 / 20%);
+}
+.nav-article nav ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0;
+  padding-top: 1rem;
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  font-family: Ubuntu, sans-serif;
+}
+.nav-article nav ul li {
+  flex-grow: 1;
+}
+.nav-article nav ul li a {
+  text-decoration: none;
+  color: #212121;
+  text-align: left;
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+  padding-left: 2.4rem;
+  line-height: 2.4rem;
+  display: inline-block;
+  width: calc(var(--guides-nav-width) - 2.4rem);
+}
+.nav-article nav ul li a.selected {
+  background-color: #eee;
+}
+.nav-article nav ul li a:hover {
+  background-color: #eee;
+}
+.nav-article article {
+  flex: 1;
+  overflow-y: auto;
+}
+.nav-article article > div:first-of-type {
+  /* styles for the first top child div */
+  min-width: 300px;
+  max-width: 760px;
+  padding: 2rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+.nav-article article .wuillesDemos a {
+  /*text-decoration: underline;*/
+  cursor: pointer;
+}
+.nav-article article .runkit {
+  overflow: hidden;
+}
+@media (max-width: 500px) {
+  .nav-article {
+    flex-direction: column;
+  }
+  .nav-article nav {
+    width: 100%;
+    /*Use this so that the linear-grading on a fixed position element
+     * does not occupy the while screen height
+     */
+    clip-path: inset(0);
+    border-bottom: 1px solid rgb(0, 0, 0, 20%);
+  }
+  .nav-article nav ul {
+    flex-direction: row;
+    padding: 0;
+  }
+  .nav-article nav::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 10rem; /* Set the width of the fade-out effect */
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 1)
+    ); /* Fade out to the left */
+  }
+}

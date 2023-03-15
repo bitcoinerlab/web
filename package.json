@@ -11,12 +11,10 @@
   "license": "MIT",
   "scripts": {
     "start": "concurrently --kill-others-on-fail 'npm run build' 'npm run serve'",
-
     "build": "concurrently --kill-others-on-fail 'npm run build:client' 'npm run build:server'",
-    "build:client": "rollup -c rollup.config.client.js -w --bundleConfigAsCjs",
-    "build:server": "rollup -c rollup.config.server.js -w --bundleConfigAsCjs",
-    "serve": "npx nodemon --watch dist/public/bundle.js --exec babel-node src/server.entry.js",
-
+    "build:client": "NODE_ENV=development rollup -c rollup.config.client.js -w --bundleConfigAsCjs",
+    "build:server": "NODE_ENV=development rollup -c rollup.config.server.js -w --bundleConfigAsCjs",
+    "serve": "nodemon dist/server.bundle.js",
     "build:prod": "npm run build:client:prod && npm run build:server:prod",
     "build:client:prod": "NODE_ENV=production rollup -c rollup.config.client.js --bundleConfigAsCjs",
     "build:server:prod": "NODE_ENV=production rollup -c rollup.config.server.js --bundleConfigAsCjs",
@@ -24,7 +22,10 @@
     "upload": "scp -r dist bitcoinerlab@ithaca:bitcoinerlab.com/"
   },
   "babel": {
-    "presets": ["@babel/preset-env", "@babel/preset-react"]
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
   },
   "devDependencies": {
     "@babel/node": "^7.20.7",
@@ -34,19 +35,24 @@
     "@rollup/plugin-commonjs": "^23.0.5",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-replace": "^5.0.1",
-    "@rollup/plugin-terser": "^0.2.0",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.0",
     "concurrently": "^7.6.0",
     "express": "^4.18.2",
     "nodemon": "^2.0.20",
     "rollup": "^3.7.4",
     "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-css-only": "^4.3.0"
+    "rollup-plugin-css-only": "^4.3.0",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "rollup-plugin-string": "^3.0.0"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.5",
     "react-router-dom": "^6.4.5",
-    "react-runkit": "github:veksen/react-runkit"
+    "react-runkit": "github:veksen/react-runkit",
+    "react-syntax-highlighter": "^15.5.0",
+    "rehype-raw": "^6.1.1"
   }
 }
