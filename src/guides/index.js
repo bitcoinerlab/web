@@ -2,8 +2,9 @@ import React from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import Nav from './nav';
 import NotFound from '../notfound';
-import LedgerProgramming from './ledgerProgramming';
 import StandardTransactions from './standardTransactions';
+import MiniscriptVault from './miniscriptVault';
+import LedgerProgramming from './ledgerProgramming';
 
 const Guides = () => (
   <div className="nav-article">
@@ -32,6 +33,11 @@ const Guides = () => (
                   </Link>
                 </li>
                 <li>
+                  <Link to="/guides/miniscript-vault">
+                    Timelock Vault with Miniscript
+                  </Link>
+                </li>
+                <li>
                   <Link to="/guides/ledger-programming">
                     Ledger Programming
                   </Link>
@@ -48,6 +54,7 @@ const Guides = () => (
           path="/standard-transactions"
           element={<StandardTransactions />}
         />
+        <Route path="/miniscript-vault" element={<MiniscriptVault />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </article>

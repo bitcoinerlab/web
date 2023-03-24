@@ -2,7 +2,7 @@
 
 This guide will walk you through an example of using the [@bitcoinerlab/descriptors](https://bitcoinerlab.com/modules/descriptors) library to create a Bitcoin transaction that moves funds from a Legacy address to a Segwit address.
 
-### What You Will Learn
+## What You Will Learn
 
 In this guide, you will learn how to:
 
@@ -11,29 +11,13 @@ In this guide, you will learn how to:
 - Retrieve the UTXO from a Bitcoin block explorer
 - Create a Bitcoin transaction that spends the UTXO and sends the funds to a Segwit address controlled by the same 12-word mnemonic.
 
-**Note**: The code shown in this guide is in TypeScript, but a transpiled JavaScript version is automatically generated when running locally if you prefer to use JavaScript.
-
 **WARNING**: The code in this guide is intended solely for educational purposes and has been simplified to the point of excluding essential error handling and security checks. It should never be used in production environments without extensive modifications and testing to ensure its safety and reliability.
 
-### Running the Code
+## Running the Code
 
-You can try out the code right now by clicking on the **SHOW PLAYGROUND** button or by installing and running the code locally.
+You can try out the code right now by clicking on the **SHOW PLAYGROUND** button or by [installing and running the code locally](https://github.com/bitcoinerlab/playground).
 
-#### Running Locally
-
-If you prefer to run the code locally, clone and run the [BitcoinerLab Playground repository](https://github.com/bitcoinerlab/playground) in your local machine:
-
-```bash
-git clone https://github.com/bitcoinerlab/playground.git
-cd playground
-npm install
-npm run build
-npm run descriptors/legacy2segwit
-```
-
-This will execute the code in `./descriptors/legacy2segwit/index.ts` and output the results.
-
-### Creating a Software Wallet
+## Creating a Software Wallet
 
 In this guide, we will be using a 12 word mnemonic to create a `BIP32` master node, which will act as our software wallet.
 
@@ -47,7 +31,7 @@ const MNEMONIC =
 const masterNode = BIP32.fromSeed(mnemonicToSeedSync(MNEMONIC), network);
 ```
 
-### Generating a Legacy Address for Funding
+## Generating a Legacy Address for Funding
 
 First, we will create a descriptor representing the initial address where we will receive some funds.
 
@@ -70,7 +54,7 @@ By running `descriptorLegacy.getAddress()`, we can obtain the corresponding Bitc
 
 To confirm the generated address from the mnemonic and key path provided, you can use [Ian Coleman's BIP39 Tool](https://iancoleman.io/bip39/) (make sure to select "Testnet" as the coin type).
 
-### Retrieving UTXO Information
+## Retrieving UTXO Information
 
 In this guide, our goal is to create a transaction that spends a UTXO from a Legacy address to a Segwit address, both generated from the same mnemonic provided and thus controlled by our wallet. To achieve this, we first need to know the details of the unspent transaction output (UTXO) we want to spend.
 
@@ -104,7 +88,7 @@ With the transaction data fetched, let's understand the role of each key element
 
 It's important to note that the UTXO we are using here has already been spent by the time you run this code. However, you can still replicate the steps to retrieve the UTXO information and assume that the funds are still present. Keep in mind that the final transaction you create will not be spendable again, but you will be able to construct exactly the same transaction that was originally spent.
 
-### Spending the UTXO
+## Spending the UTXO
 
 Now that we have the UTXO information, we can create a transaction that spends it.
 

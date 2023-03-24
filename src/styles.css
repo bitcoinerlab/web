@@ -47,6 +47,15 @@ article.notfound {
   font-size: 1.6rem;
   line-height: 1.5;
 }
+article h1 {
+  font-size: 1.5em;
+}
+article h2 {
+  font-size: 1.2em;
+}
+article h3 {
+  font-size: 1.0em;
+}
 
 button {
   background-color: #f7931a;
