@@ -127,9 +127,9 @@ To sign the transaction, we use the `signBIP32` method. This method signs the PS
 descriptors.signers.signBIP32({ psbt, masterNode });
 ```
 
-After signing the transaction, we need to finalize the input using the `finalizePsbtInput` method. Finalizing the input involves several steps, including adding the scriptSig or scriptWitness. The scriptSig is a part of the transaction input that contains the unlocking script, which proves the ownership of the UTXO being spent. In the case of Segwit transactions, the unlocking script is called the scriptWitness.
+After signing the transaction, we need to finalize the input using the `finalizePsbtInput` method. Finalizing the input involves several steps, including adding the `scriptSig` or `scriptWitness`. The `scriptSig` is a part of the transaction input that contains the unlocking script, which proves the ownership of the UTXO being spent. In the case of Segwit transactions, the unlocking script is called the `scriptWitness`.
 
-Finalizing the input means that all required signatures are present, the scriptSig or scriptWitness has been added, and the input is ready to be included in the transaction. This is an essential step, as it verifies that the transaction is complete and ready for broadcasting.
+Finalizing the input means that all required signatures are present, the `scriptSig` or `scriptWitness` has been added, and the input is ready to be included in the transaction. This is an essential step, as it verifies that the transaction is complete and ready for broadcasting.
 
 ```typescript
 descriptorLegacy.finalizePsbtInput({ psbt, index: legacyInputNumber });
@@ -145,3 +145,7 @@ const spendTxPushResult = await(
 ```
 
 You have now completed the guide on creating a Bitcoin transaction that moves funds from a Legacy address to a Segwit address using the [@bitcoinerlab/descriptors](https://bitcoinerlab.com/modules/descriptors) library.
+
+## Questions and Issues
+
+Congratulations on completing this guide! We hope that you found it informative and useful in your journey to learn more about Bitcoin development. If you have any questions or issues, please feel free to visit the [GitHub repository associated with this guide](https://github.com/bitcoinerlab/playground/), where you can open an issue and we'll try our best to help you out.
