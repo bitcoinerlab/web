@@ -146,7 +146,7 @@ The `wsh` descriptor used in this guide will look something like this:
 `[7ab7a6e7/69420'/1'/0']tpubDD3MSqHCE9VUvUALHFUTr7y5Fuvp8S1Qu4CTiDiD6tBtjk6pjJHqc71LnJb4xHszoHFcGut4erbHFockGfuNYAtzGucWZvRTgHY3RVGtv38/0/0` is a BIP32 key expression (the one used for the unvault) and,
 `0316d4e17fe531498b8de6ef9d1f261e5face40d4110e3a25b2df6c340ac601744` is a bare public key expression (the one used as an emergency exit).
 
-The last part to explain from the code block above is that when a descriptor has multiple spending paths, the user needs to set which one to use. To do so, an array of the available `signersPubKeys` must be passed to the descriptor. The corresponding unlocking script (the script witness, in this case) will be computed later from this information when finalizing the transaction.
+The last part to explain from the code block above is that when a descriptor has multiple spending paths, the user needs to set which one to use. This is done by passing the public keys that will be used to sign the transaction using the variable `signersPubKeys`. The corresponding unlocking script (the script witness, in this case) will be computed later from this information when finalizing the transaction.
 Note that in order to test different configurations, you can set `EMERGENCY_RECOVERY` variable to `true` or `false` back and forth.
 
 ## Funding the TimeLocked Vault
