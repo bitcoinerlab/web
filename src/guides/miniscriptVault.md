@@ -71,10 +71,9 @@ const POLICY = (after: number) =>
   `or(pk(@emergencyKey),and(pk(@unvaultKey),after(${after})))`;
 ```
 
-This function returns a policy, given a certain `after` number. A policy is composed of other more basic policies. For example, the primitive `after` policy corresponds to a Bitcoin absolute timelock, which is a condition that prevents a transaction from being spent before a certain `after` block height. `pk` primitive policies require that a public key signs the transaction so that it can be spent. Thus, the policy above means:
+This function returns a policy, given a certain `after` number. A policy is composed of other more basic policies. For example, the primitive `after` policy corresponds to a Bitcoin absolute timelock, which is a condition that prevents a UTXO from being spent before a certain block height. On the other hand, `pk` primitive policies require that a public key signs the transaction so that it can be spent. Thus, the policy above means:
 
 > A certain transaction can only be spent either (`or`):
->
 > - unconditionally if `@emergencyKey` signs the transaction
 > - `or` if both `@unvaultKey` signs the transaction `and` the blockchain is at or past the `after` block height
 
@@ -82,7 +81,7 @@ This function returns a policy, given a certain `after` number. A policy is comp
 
 In this section, we'll compile the policy to [Miniscript](https://bitcoin.sipa.be/miniscript/). Miniscript is a language for expressing Bitcoin Scripts in a structured way, enabling analysis, composition, generic signing, and more. The relationship between policies and Miniscript is that policies provide a human-readable way of expressing conditions, while Miniscript offers a machine-readable representation (though very similar to the Policy language) that can be directly translated into Bitcoin Script.
 
-To compile the policy, we need to fetch the current block height from the Blockstream Explorer. This information will be used to set the `after` parameter in the policy.
+To compile the policy, we will fetch the current block height from the Blockstream Bitcoin Explorer. This information will be used to set the `after` parameter in the policy.
 
 ```typescript
 const EXPLORER = 'https://blockstream.info/testnet';
@@ -136,18 +135,18 @@ In the code above:
 
 1. We derive the public key for the unvaulting wallet using the unvault master node and the specified derivation path. The unvaulting wallet is the one that can be used to spend the locked UTXO after the timelock expires.
 
-2. We replace the placeholders in the Miniscript with the appropriate key expressions for the unvault and emergency keys.
+2. We replace the `@unvaultKey` and `@emergencyKey` placeholders in the `wshExpression` with their appropriate key expressions. The `wshExpression` is a structured format that describes the rules and conditions required to spend an output in a transaction. This format is called a **Bitcoin descriptor** and is specified in the [Bitcoin Core documentation](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md).
 
-3. We create a new descriptor object with the updated Miniscript expression. A [Bitcoin descriptor](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md) is a method for describing the rules and conditions required to spend an output in a transaction. The `@bitcoinerlab/descriptors` library enables parsing and creating Bitcoin Descriptors, including those using Miniscript.
+3. We create a new descriptor object with the updated expression.
 
-The descriptor above describes a Witness Script Hash (WSH) output. WSH outputs in Bitcoin transactions allow the use of arbitrary scripts, in contrast to standard transaction types. This flexibility enables complex spending conditions and advanced use cases such as multi-signature transactions and timelocked transactions. Descriptors with `wsh` top-level expressions can enclose `miniscript` expressions that are then converted to Bitcoin Scripts, as described in the [Bitcoin core repository](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#reference).
+**Tip:** The descriptor above describes a Witness Script Hash (WSH) output. WSH outputs in Bitcoin transactions allow the use of arbitrary scripts, in contrast to standard transaction types. This flexibility enables complex spending conditions and advanced use cases such as multi-signature transactions and timelocked transactions. Descriptors with `wsh` top-level expressions can enclose `miniscript` expressions that are then converted to Bitcoin Scripts, as described in the [Bitcoin core repository](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#reference).
 
 The `wsh` descriptor used in this guide will look something like this:
 `wsh(andor(pk([7ab7a6e7/69420'/1'/0']tpubDD3MSqHCE9VUvUALHFUTr7y5Fuvp8S1Qu4CTiDiD6tBtjk6pjJHqc71LnJb4xHszoHFcGut4erbHFockGfuNYAtzGucWZvRTgHY3RVGtv38/0/0),after(2425654),pk(0316d4e17fe531498b8de6ef9d1f261e5face40d4110e3a25b2df6c340ac601744)))`, where:
 `[7ab7a6e7/69420'/1'/0']tpubDD3MSqHCE9VUvUALHFUTr7y5Fuvp8S1Qu4CTiDiD6tBtjk6pjJHqc71LnJb4xHszoHFcGut4erbHFockGfuNYAtzGucWZvRTgHY3RVGtv38/0/0` is a BIP32 key expression (the one used for the unvault) and,
-`0316d4e17fe531498b8de6ef9d1f261e5face40d4110e3a25b2df6c340ac601744` is a bare public key (the one used as an emergency exit).
+`0316d4e17fe531498b8de6ef9d1f261e5face40d4110e3a25b2df6c340ac601744` is a bare public key expression (the one used as an emergency exit).
 
-If a descriptor has multiple spending paths, the user must set which is the one that has to be used. To do so, an array of the available `signersPubKeys` must be passed to the descriptor. The corresponding unlocking script (the script witness, in this case) will be computed from this information.
+The last part to explain from the code block above is that when a descriptor has multiple spending paths, the user needs to set which one to use. To do so, an array of the available `signersPubKeys` must be passed to the descriptor. The corresponding unlocking script (the script witness, in this case) will be computed later from this information when finalizing the transaction.
 Note that in order to test different configurations, you can set `EMERGENCY_RECOVERY` variable to `true` or `false` back and forth.
 
 ## Funding the TimeLocked Vault
@@ -196,7 +195,7 @@ psbt.addOutput({
 
 In the code above, we make use of Partially Signed Bitcion Transactions (PSBT)s to create the spending transaction. PSBTs come in handy when working with descriptors, especially when using scripts, because they allow multiple parties to collaborate in the signing process. This is particularly useful for [more complex scenarios](/guides/ledger-programming) than the one in this guide.
 
-We subtract 1000 satoshis from the input value to account for transaction fees and set up the PSBT by using `updatePsbt`, which sets up the descriptor as one of its input. We then add an output to the PSBT that sends the funds to a hardcoded address that we don't care about, just for the purposes of demonstrating how to use the library API.
+We subtract 1000 satoshis from the input value to account for transaction mining fees and set up the PSBT by using `updatePsbt`, which sets up the descriptor as one of its input. We then add an output to the PSBT that will send the funds to a certain hardcoded address that we don't care about, just for the purposes of demonstrating how to use the library API.
 
 ## Signing, Finalizing and Pushing the PSBT
 
@@ -225,9 +224,9 @@ const spendTxPushResult = await(
 
 The code above finalizes the input using the `finalizePsbtInput` method. Finalizing the input involves adding the `scriptSig` or `scriptWitness` (in the case of Segwit), which is necessary to prove ownership of the UTXO being spent. This is an essential step, as it verifies that the transaction is complete and ready for broadcasting.
 
-The `finalizePsbtInput` method will provide different solutions depending on the `signersPubKeys` signaled when creating the descriptor object. There are two possible spending solutions: waiting for the time-lock (using the `unvaultMasterNode` public key) or using the emergency path (using the `emergencyKey`).
+The `finalizePsbtInput` method will provide different solutions depending on the `signersPubKeys` signaled when creating the descriptor object.
 
-After finalizing the input, we only need to push the transaction to the miners. Once done, we check if it was accepted by the network or rejected due to it being non-final. Miners will reject a transaction with a 'non-final' error if the TimeLock is not respected. If the transaction was rejected, we inform the user that they need to wait 5 blocks before trying again. If the transaction was successful, we display a link to the transaction on the blockchain explorer for verification.
+After finalizing the input, we only need to push the transaction to the Bitcoin network. Once done, we check if it was accepted or rejected due to it being non-final. Miners will reject a transaction with a 'non-final' error if the TimeLock is not respected. If the transaction was rejected, we inform the user that they need to wait 5 blocks before trying again. If the transaction was successful, we display a link to the transaction on the blockchain explorer for verification.
 
 Here is the code:
 
