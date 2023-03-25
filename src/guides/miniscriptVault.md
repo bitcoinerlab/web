@@ -6,7 +6,9 @@ TimeLocked Vaults can help protect Bitcoin users against extortion and coin thef
 
 In this guide, a simple setup is proposed to demonstrate the usage of the `@bitcoinerlab` family of modules. In this setup, the user creates a transaction that sends the coins to a specific address, which becomes an unspent transaction output (UTXO) that is locked with a time-lock, meaning it cannot be spent until a certain time in the future.
 
-If the user's wallet is stolen, the user can resort to the "Panic button" analogy. This involves immediately transferring the funds to a very cold storage for safety. The storage could be a Bitcoin address controlled by a private key engraved on a steel plate. This plate might be stored in a bank vault in a different country or somewhere inconvenient to access. The "Panic button" is meant for very low probability events. Additionally, the emergency exit action can be delegated to third parties without risk.
+If a user's wallet is stolen, they can use the "Panic button" approach to protect their funds. This involves immediately transferring the funds to a very cold storage before the timelock expires and the attacker gains access. Such "very cold storage" could be a Bitcoin address controlled by a private key that's engraved on a steel plate and stored in a bank vault in a different country or somewhere inconvenient to access.
+
+It's important to note that the "Panic button" analogy is meant for low-probability events. Furthermore, the emergency exit action can be delegated to third parties without risk.
 
 This setup gets weaker as the timelock date approaches, but it serves as an example of how to use this technology. For other, more secure (and complex) TimeLock setups, take a look at this [proposal](https://github.com/bitcoinerlab/farvault-lib).
 
