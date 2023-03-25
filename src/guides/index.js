@@ -16,36 +16,32 @@ const Guides = () => (
           element={
             <div>
               <h1>Guides</h1>
-              <p>
-                Welcome to our guides section! We will be adding more guides
-                here as we write them, so stay tuned!
-              </p>
-              <p>
-                In the meanwhile, we don't have complete guides, but we have a
-                couple of code playgrounds that you can use to play with running
-                code, including Ledger signing.
-              </p>
+              <p>Welcome to our guides section!</p>
               <p>Check out the available guides and playgrounds below:</p>
               <ul>
                 <li>
                   <Link to="/guides/standard-transactions">
                     Standard Transactions
                   </Link>
+                  , for learning how to create a Bitcoin transaction that moves
+                  funds from/to standard Bitcoin outputs such as P2PKH and
+                  P2WPKH.
                 </li>
                 <li>
                   <Link to="/guides/miniscript-vault">
                     Timelock Vault with Miniscript
                   </Link>
+                  , for creating a Bitcoin TimeLocked Vault using Miniscript,
+                  protecting users against extortion and coin theft.
                 </li>
                 <li>
                   <Link to="/guides/ledger-programming">
                     Ledger Programming
                   </Link>
+                  , for how to program a Ledger Nano device, including using
+                  Miniscript.
                 </li>
               </ul>
-              <p>
-                These and other guides are in the final stages of development.
-              </p>
             </div>
           }
         ></Route>

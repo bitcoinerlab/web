@@ -19,14 +19,16 @@
   top: 0;
   bottom: 0;
   /*Read comments for .nav-article article > div:first-of-type.guide:*/
-  padding: 2rem;
-  width: 760px;
+  max-width: calc(min(100%, 800px)); /*760px +20px + 20px*/
+  padding: 20px;
+  box-sizing: border-box; /* This will make sure that the padding and border are included in the overall width of the element, so that the max-width value takes them into account*/
   z-index: 0;
 }
 .guide .main .show-playground-button {
   z-index: 1;
   position: sticky;
   float: right;
+  right: 20px;
   top: 0;
 }
 

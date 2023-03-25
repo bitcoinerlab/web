@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const navigate = useNavigate();
-  const handleTryNow = () => navigate('/modules/descriptors');
+  const handleTryNow = () => navigate('/guides');
   return (
     <>
       <section className="home">
