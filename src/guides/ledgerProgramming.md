@@ -1,12 +1,20 @@
 # Programming a Ledger Nano
 
-This guide will explain how to program a Ledger Nano device. Although the guide is not yet complete, the code is fully functional and can be used. The code includes helpful comments, making it easy to understand it.
+In this guide, we will demonstrate how to use the `@bitcoinerlab` modules to interact with the Ledger Nano device and perform a multi-signature transaction. This guide assumes that you already know what a descriptor, miniscript, and the policy language are. Please, refer to the [Guide on Miniscript](/guides/miniscript-vault) if you are not familiar with these concepts. The focus of this guide is on the Ledger programming part and multi-signature transactions.
 
-**Note:** You can make it easier to follow the code by comparison if you complete the [Guide on Miniscript](/guides/miniscript-vault).
+## What You Will Learn
+
+In this guide, you will learn how to:
+
+- Set up and use @bitcoinerlab modules with Ledger Nano devices
+- Create and manage Bitcoin descriptors
+- Sign multi-signature transactions using Ledger and software wallets
+- Finalize and broadcast transactions to the Bitcoin network
 
 ## Running the Code
 
 You can try out the code right now by clicking on the **SHOW PLAYGROUND** button or by [installing and running the code locally](https://github.com/bitcoinerlab/playground).
+
 
 
 ## Questions and Issues

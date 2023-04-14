@@ -1,16 +1,16 @@
-# Creating a TimeLocked Vault with Miniscript
+# Creating a Timelocked Vault with Miniscript
 
-This guide will walk you through an example of using the [@bitcoinerlab/descriptors](https://bitcoinerlab.com/modules/descriptors) library to create a Bitcoin TimeLocked Vault.
+This guide will walk you through an example of using [@bitcoinerlab libraries](https://bitcoinerlab.com/modules) to create a Bitcoin timelocked Vault.
 
-TimeLocked Vaults can help protect Bitcoin users against extortion and coin theft. Multiple setups are possible.
+Timelocked Vaults can help protect Bitcoin users against extortion and coin theft. Multiple setups are possible.
 
-In this guide, a simple setup is proposed to demonstrate the usage of the `@bitcoinerlab` family of modules. In this setup, the user creates a transaction that sends the coins to a specific address, which becomes an unspent transaction output (UTXO) that is locked with a time-lock, meaning it cannot be spent until a certain time in the future.
+In this guide, a streamlined setup is proposed to illustrate the application of the `@bitcoinerlab` suite of modules. Here, the user generates a transaction that transfers coins to a designated address, creating an unspent transaction output (UTXO) subject to a timelock. Consequently, the UTXO remains unspendable until a specified future time.
 
-If a user's wallet is stolen, they can use the "Panic button" approach to protect their funds. This involves immediately transferring the funds to a very cold storage before the timelock expires and the attacker gains access. Such "very cold storage" could be a Bitcoin address controlled by a private key that's engraved on a steel plate and stored in a bank vault in a different country or somewhere inconvenient to access.
+If a user's wallet is compromised, they can employ the "Panic Button" strategy to safeguard their assets. This entails promptly relocating the funds to an ultra-secure cold storage, which must be highly inconvenient to access, before the timelock expires, preventing unauthorized access. In this sense, while it serves as a last-resort measure, the ultra-secure storage ensures the funds' safety as the attacker is virtually unable to access them, even though it will be quite inconvenient for the user as well. This storage option could be an alternative Bitcoin address managed by a private key securely stored in a remote vault in another country, for instance, ultimately accessible for the user while presenting an insurmountable obstacle for the attacker.
 
-It's important to note that the "Panic button" analogy is meant for low-probability events. Furthermore, the emergency exit action can be delegated to third parties without risk.
+An additional layer of security can be achieved by delegating the emergency exit action to third parties, without the need for trust. This can be done by providing them access to pre-signed transactions, specifically those that would transfer funds to the ultra-secure cold storage. Since these transactions are pre-signed, the third party cannot alter the transaction details or spend the funds, ensuring the user's safety. This approach further strengthens the protection of the user's assets while maintaining control over the funds' destination, even during an emergency.
 
-This setup gets weaker as the timelock date approaches, but it serves as an example of how to use this technology. For other, more secure (and complex) TimeLock setups, take a look at this [proposal](https://github.com/bitcoinerlab/farvault-lib).
+This setup gets weaker as the timelock date approaches, but it serves as an example of how to use this technology. For other, more secure (and complex) timelock setups, take a look at this [proposal](https://github.com/bitcoinerlab/farvault-lib).
 
 It is probably a good idea to review the previous guide discussing [Standard Transactions](/guides/standard-transactions) before diving into this one.
 
@@ -34,12 +34,12 @@ You can try out the code right now by clicking on the **SHOW PLAYGROUND** button
 
 This guide uses two types of wallets:
 
-- A BIP32 wallet using word mnemonics (the typical 12 or 24 secure words protected wallet) is used for unvaulting the TimeLocked funds and successfully spending them after the expiry date.
+- A BIP32 wallet using word mnemonics (the typical 12 or 24 secure words) is used for unvaulting the timelocked funds and successfully spending them after the expiry date.
 - A [single key (WIF Wallet)](https://learnmeabitcoin.com/technical/wif) that can immediately unvault the funds at any time and send them to a panic address.
 
 Note that there is no specific requirement for the wallet type to be used. In this guide, we use BIP32 and WIF wallets simply to demonstrate how to use the API of the `@bitcoinerlab/descriptors` library.
 
-This guide can be run both in browser-like environments and in Node.js environments. The code automatically generates the mnemonic-based and WIF wallets described above. The wallets are then stored in either the browser's `localStorage` for browser-based environments or in regular files for Node.js. Storage is implemented so that different instances of the software can be run while maintaining the same wallets. Please note that this is not a secure way to store keys in production, but it serves our purpose for this simple guide:
+This guide can be run both in browser-like environments and in Node.js environments. The code automatically generates the mnemonic-based and WIF wallets described above. The wallets are then stored in either the browser's `localStorage` for browser-based environments or in regular files for Node.js. Storage is implemented so that different instances of the software can be run while maintaining the same wallets. Please note that this method is not secure for storing keys in production but is suitable for demonstrating the usage of the libraries in this example:
 
 ```typescript
 if (isWeb) {
@@ -100,9 +100,9 @@ if (!issane) throw new Error(`Error: miniscript not sane`);
 
 In the code above, we first fetch the current block height from the Blockstream Explorer API. We then set the `after` parameter in the policy by adding a specific number of blocks (`BLOCKS`) to the current block height. Next, we compile the policy into a Miniscript expression using the `compilePolicy` function. We also check if the compiled Miniscript expression is sane, which means it's valid and non-malleable (preventing a third party from modifying an existing script into another valid script, stealthily changing the transaction size). If it's not sane, an error is thrown.
 
-## Generating the TimeLocked Vault Descriptor
+## Generating the Timelocked Vault Descriptor
 
-In this section, we will generate the TimeLocked Vault and set up two ways to unvault the funds: either by waiting for the timelock to expire or by using the Panic Button analogy. The following code will be used for this purpose:
+In this section, we will generate the timelocked Vault and set up two ways to unvault the funds: either by waiting for the timelock to expire or by using the Panic Button analogy. The following code will be used for this purpose:
 
 ```typescript
 const EMERGENCY_RECOVERY = false; //Set it to true to use the "Panic Button"
@@ -151,9 +151,9 @@ The `wsh` descriptor used in this guide will look something like this:
 The last part to explain from the code block above is that when a descriptor has multiple spending paths, the user needs to set which one to use. This is done by passing the public keys that will be used to sign the transaction using the variable `signersPubKeys`. The corresponding unlocking script (the script witness, in this case) will be computed later from this information when finalizing the transaction.
 Note that in order to test different configurations, you can set `EMERGENCY_RECOVERY` variable to `true` or `false` back and forth.
 
-## Funding the TimeLocked Vault
+## Funding the Timelocked Vault
 
-In the previous section, we generated a TimeLocked Vault using Miniscript and created a descriptor for a WSH output. Now, we will fund the TimeLocked Vault.
+In the previous section, we generated a timelocked Vault using Miniscript and created a descriptor for a WSH output. Now, we will fund the timelocked Vault.
 
 ```typescript
 const wshAddress = wshDescriptor.getAddress();
@@ -174,7 +174,7 @@ In the code above, we retrieve the Bitcoin address corresponding to the WSH desc
 
 ## Spending the Transaction using a PSBT
 
-If the corresponding UTXO has been funded, we can proceed to show how to spend the transaction. As explained earlier, there are two ways to spend the transaction - by waiting for the expiration of the time-lock or by using the analogy of a "Panic Button". This behavior can be controlled with the `EMERGENCY_RECOVERY` variable:
+If the corresponding UTXO has been funded, we can proceed to show how to spend the transaction. As explained earlier, there are two ways to spend the transaction - by waiting for the expiration of the timelock or by using the analogy of a "Panic Button". This behavior can be controlled with the `EMERGENCY_RECOVERY` variable:
 
 ```typescript
 Log(`Successfully funded. Now let's spend the funds.`);
@@ -228,7 +228,7 @@ The code above finalizes the input using the `finalizePsbtInput` method. Finaliz
 
 The `finalizePsbtInput` method will provide different solutions depending on the `signersPubKeys` signaled when creating the descriptor object.
 
-After finalizing the input, we only need to push the transaction to the Bitcoin network. Once done, we check if it was accepted or rejected due to it being non-final. Miners will reject a transaction with a 'non-final' error if the TimeLock is not respected. If the transaction was rejected, we inform the user that they need to wait 5 blocks before trying again. If the transaction was successful, we display a link to the transaction on the blockchain explorer for verification.
+After finalizing the input, we only need to push the transaction to the Bitcoin network. Once done, we check if it was accepted or rejected due to it being non-final. Miners will reject a transaction with a 'non-final' error if the timelock is not respected. If the transaction was rejected, we inform the user that they need to wait 5 blocks before trying again. If the transaction was successful, we display a link to the transaction on the blockchain explorer for verification.
 
 Here is the code:
 
@@ -240,7 +240,7 @@ if (
   spendTxPushResult.match('non-BIP68-final') ||
   spendTxPushResult.match('non-final')
 ) {
-  Log(`This means it's still TimeLocked and miners rejected the tx.`);
+  Log(`This means it's still timelocked and miners rejected the tx.`);
   Log(`<a href="javascript:start();">Try again in a few blocks!</a>`);
 } else {
   const txId = spendTx.getId();

@@ -4,8 +4,16 @@ import { NavLink } from 'react-router-dom';
 const Nav = () => {
   const links = [
     { path: '/guides/standard-transactions', label: 'Standard Transactions' },
-    { path: '/guides/miniscript-vault', label: 'TimeLocked Vault with Miniscript' },
-    { path: '/guides/ledger-programming', label: 'Programming a Ledger Nano' }
+    {
+      path: '/guides/miniscript-vault',
+      label: 'TimeLocked Vault with Miniscript'
+    },
+    { path: '/guides/ledger-programming', label: 'Programming a Ledger Nano' },
+    {
+      path: '/guides/multisig-fallback-timelock',
+      label:
+        'Miniscript with Lunaticoin (Spanish)'
+    }
   ];
 
   return (

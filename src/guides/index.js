@@ -5,7 +5,7 @@ import NotFound from '../notfound';
 import StandardTransactions from './standardTransactions';
 import MiniscriptVault from './miniscriptVault';
 import LedgerProgramming from './ledgerProgramming';
-
+import MultiSigFallbackTimelock from './multisigFallbackTimelock';
 const Guides = () => (
   <div className="nav-article">
     <Nav />
@@ -41,6 +41,15 @@ const Guides = () => (
                   , for how to program a Ledger Nano device, including using
                   Miniscript.
                 </li>
+                <li>
+                  <Link to="/guides/multisig-fallback-timelock">
+                    Programming Miniscript with Lunaticoin (Spanish)
+                  </Link>
+                  , for a recorded video programming session (in Spanish) with{' '}
+                  <a href="https://lunaticoin.com/">Lunaticoin</a>, a Bitcoin
+                  expert, educator, and advocate. Learn how to create a MultiSig
+                  wallet with a time-locked fallback address.
+                </li>
               </ul>
             </div>
           }
@@ -51,6 +60,10 @@ const Guides = () => (
           element={<StandardTransactions />}
         />
         <Route path="/miniscript-vault" element={<MiniscriptVault />} />
+        <Route
+          path="/multisig-fallback-timelock"
+          element={<MultiSigFallbackTimelock />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </article>
