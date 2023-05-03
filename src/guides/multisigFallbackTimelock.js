@@ -59,7 +59,7 @@ const MultiSigFallbackTimelock = () => {
       <ul>
         <li>
           Twitter: respondiendo a{' '}
-          <a href="https://twitter.com/lunaticoin/status/1646420910558068736">
+          <a href="https://twitter.com/lunaticoin/status/1646795350588399616">
             este hilo
           </a>
           .
