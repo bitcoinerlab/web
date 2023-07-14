@@ -31,6 +31,25 @@
   right: 20px;
   top: 0;
 }
+.guide .main .show-playground-button:after {
+  content: 'Ad Blockers May Affect Load';
+  display: block;
+  font-size: small;
+  position: absolute; /* This takes the ::after content out of the normal flow */
+  top: 100%; /* This positions the ::after content just below the button */
+  color: black;
+  text-align: center; /* This centers the text within the ::after content */
+  font-size: 10px;
+  left: 0;
+  font-weight: normal;
+  line-height: 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-transform: none;
+  margin-top: 2px;  /* This adds some vertical padding */
+  white-space: nowrap; /* Prevents the text from wrapping */
+  left: 50%; /* Positions the left edge of the content box to the middle of the button */
+  transform: translateX(-50%); /* Shifts the content box to the left by half its width */
+}
 
 .guide .playground {
   position: absolute;
