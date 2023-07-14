@@ -32,14 +32,14 @@
   top: 0;
 }
 .guide .main .show-playground-button:after {
-  content: 'Ad Blockers May Affect Load';
+  content: 'Issues? Use Chrome & No Ad Blockers';
   display: block;
   font-size: small;
   position: absolute; /* This takes the ::after content out of the normal flow */
   top: 100%; /* This positions the ::after content just below the button */
   color: black;
   text-align: center; /* This centers the text within the ::after content */
-  font-size: 10px;
+  font-size: 9px;
   left: 0;
   font-weight: normal;
   line-height: 1rem;
