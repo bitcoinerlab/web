@@ -6,7 +6,7 @@
     "url": "https://bitcoinerlab.com"
   },
   "description": "BitcoinerLAB Web",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://bitcoinerlab.com",
   "license": "MIT",
   "scripts": {
