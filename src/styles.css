@@ -1,12 +1,15 @@
 /*https://www.schemecolor.com/orange-and-blue.php*/
 /*https://www.color-hex.com/color-palette/4955*/
+:root {
+  --bitcoinerlab-blue: #0d579b;
+}
 html {
   font-size: 62.5%;
   font-family: Ubuntu, sans-serif;
   line-height: 1.15;
 }
 a {
-  color: #0d579b;
+  color: var(--bitcoinerlab-blue);
   text-decoration: none;
 }
 body {
@@ -25,7 +28,7 @@ body {
 }
 .header {
   padding: 0px 20px;
-  background-color: #0d579b;
+  background-color: var(--bitcoinerlab-blue);
   font-family: Ubuntu, Helvetica, Arial, sans-serif;
   padding-top: 50px;
   padding-bottom: 50px;
@@ -191,7 +194,7 @@ button {
   margin-bottom: 2rem;
   margin-top: 4rem;
   font-size: 2.4rem;
-  color: #0d579b;
+  color: var(--bitcoinerlab-blue);
   font-weight: 400;
   font-family: Ubuntu, Helvetica, Arial, sans-serif;
 }

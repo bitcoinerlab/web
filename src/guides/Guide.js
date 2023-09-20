@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
-export default props => {
+export default (props) => {
   const [showPlayground, setShowPlayground] = useState(false);
 
   const togglePlayground = () => {
@@ -23,9 +23,9 @@ export default props => {
             el.getBoundingClientRect().y <
             el.parentElement.getBoundingClientRect().y
           ) {
-            el.style.position = 'absolute';
+            el.style.position = "absolute";
             window.setTimeout(() => {
-              if (playgroundRef.current) el.style.removeProperty('position');
+              if (playgroundRef.current) el.style.removeProperty("position");
             }, 0);
           }
         }
@@ -37,8 +37,8 @@ export default props => {
   }, []);
 
   return (
-    <div className={`guide ${showPlayground ? 'playgroundOn' : ''}`}>
-      <div className="main" style={{ overflowWrap: 'break-word' }}>
+    <div className={`guide ${showPlayground ? "playgroundOn" : ""}`}>
+      <div className="main breakWord">
         <button className="show-playground-button" onClick={togglePlayground}>
           Show Playground
         </button>

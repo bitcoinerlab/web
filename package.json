@@ -6,7 +6,7 @@
     "url": "https://bitcoinerlab.com"
   },
   "description": "BitcoinerLAB Web",
-  "version": "1.0.3",
+  "version": "3.0.0",
   "homepage": "https://bitcoinerlab.com",
   "license": "MIT",
   "scripts": {
@@ -14,8 +14,9 @@
     "build": "concurrently --kill-others-on-fail 'npm run build:client' 'npm run build:server'",
     "build:client": "NODE_ENV=development rollup -c rollup.config.client.js -w --bundleConfigAsCjs",
     "build:server": "NODE_ENV=development rollup -c rollup.config.server.js -w --bundleConfigAsCjs",
+    "webdocs": "./build-docs.bash",
     "serve": "nodemon dist/server.bundle.js",
-    "build:prod": "npm run build:client:prod && npm run build:server:prod",
+    "build:prod": "npm run webdocs && npm run build:client:prod && npm run build:server:prod",
     "build:client:prod": "NODE_ENV=production rollup -c rollup.config.client.js --bundleConfigAsCjs",
     "build:server:prod": "NODE_ENV=production rollup -c rollup.config.server.js --bundleConfigAsCjs",
     "serve:prod": "pm2 start dist/server.bundle.js",

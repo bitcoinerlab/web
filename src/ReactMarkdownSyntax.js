@@ -17,6 +17,9 @@ import { materialOceanic as prismStyle } from 'react-syntax-highlighter/dist/cjs
 //It is the runkit thingy: <script src="https://embed.runkit.com"></script>
 
 import rehypeRaw from 'rehype-raw'; //So that <details><summary> tags work
+//import remarkGfm from 'remark-gfm'; //So that tables can be rendered. Include it as this: remarkPlugins={[remarkGfm]}
+
+
 
 export default props => {
   return (

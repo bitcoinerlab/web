@@ -1,44 +1,54 @@
+:root {
+  --articles-max-width: 760px;
+  --articles-min-width: 300px;
+  --articles-padding: 2rem;
+
+  --docs-and-api-menu-height: 47px;
+
+  --navs-spacing: 2.4rem;
+}
+
 .nav-article {
   height: 100%;
   display: flex;
   flex-direction: row;
 }
-.nav-article nav {
+.nav-article > nav {
   --guides-nav-width: 160px;
   overflow-y: auto;
   width: var(--guides-nav-width);
   box-shadow: 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%),
     0 2px 4px -1px rgb(0 0 0 / 20%);
 }
-.nav-article nav ul {
+.nav-article > nav ul {
   display: flex;
   flex-direction: column;
   list-style-type: none;
   padding: 0;
-  padding-top: 1rem;
+  /*padding-top: 1rem;*/
   margin: 0;
   font-size: 1.4rem;
   font-weight: 600;
   font-family: Ubuntu, sans-serif;
 }
-.nav-article nav ul li {
+.nav-article > nav ul li {
   flex-grow: 1;
 }
-.nav-article nav ul li a {
+.nav-article > nav ul li a {
   text-decoration: none;
   color: #212121;
   text-align: left;
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
-  padding-left: 2.4rem;
-  line-height: 2.4rem;
+  padding-left: var(--navs-spacing);
+  line-height: var(--navs-spacing);
   display: inline-block;
-  width: calc(var(--guides-nav-width) - 2.4rem);
+  width: calc(var(--guides-nav-width) - var(--navs-spacing));
 }
-.nav-article nav ul li a.selected {
+.nav-article > nav ul li a.selected {
   background-color: #eee;
 }
-.nav-article nav ul li a:hover {
+.nav-article > nav ul li a:hover {
   background-color: #eee;
 }
 .nav-article article {
@@ -47,9 +57,9 @@
 }
 .nav-article article > div:first-of-type {
   /* styles for the first top child div */
-  min-width: 300px;
-  max-width: 760px;
-  padding: 2rem;
+  min-width: var(--articles-min-width);
+  max-width: var(--articles-max-width);
+  padding: var(--articles-padding);
   font-size: 1.6rem;
   line-height: 1.5;
 }
@@ -64,7 +74,7 @@
   .nav-article {
     flex-direction: column;
   }
-  .nav-article nav {
+  .nav-article > nav {
     width: 100%;
     /*Use this so that the linear-grading on a fixed position element
      * does not occupy the while screen height
@@ -72,11 +82,11 @@
     clip-path: inset(0);
     border-bottom: 1px solid rgb(0, 0, 0, 20%);
   }
-  .nav-article nav ul {
+  .nav-article > nav ul {
     flex-direction: row;
     padding: 0;
   }
-  .nav-article nav::after {
+  .nav-article > nav::after {
     content: '';
     position: fixed;
     top: 0;
@@ -89,4 +99,57 @@
       rgba(255, 255, 255, 1)
     ); /* Fade out to the left */
   }
+}
+.nav-article nav.docsAndAPIMenu {
+  width: 100%;
+  max-width: calc(var(--articles-max-width) + var(--articles-padding));
+  clip-path: inset(0);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  height: var(--docs-and-api-menu-height);
+  z-index: 1;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;  /* Center children vertically */
+  justify-content: start;  /* Align children to the start (left) horizontally, which is default but added for clarity */
+}
+
+.nav-article nav.docsAndAPIMenu ul {
+  font-size: 1.4rem;
+  list-style-type: none; /* Remove bullet points */
+  display: flex;        /* Horizontal display */
+  padding: 0;           /* Remove default padding */
+  margin: 0;            /* Remove default margin */
+  padding-left: var(--navs-spacing);
+}
+
+/* Styling for each list item */
+.nav-article nav.docsAndAPIMenu ul li {
+  margin-right: 20px;   /* Space between each item, adjust as needed */
+}
+
+/* Default link styling */
+.nav-article nav.docsAndAPIMenu ul li a {
+  text-decoration: none;   /* Remove underline for non-active links */
+  color: inherit;          /* Use parent's color, can set to other value if needed */
+}
+
+/* Active link styling */
+.nav-article nav.docsAndAPIMenu ul li a.selected {
+  color: var(--bitcoinerlab-blue);             /* Blue color for active link */
+  font-weight: bold;text-decoration: underline;
+  text-underline-offset: 1rem;
+}
+
+.nav-article iframe.APIIframe {
+  width: 100%;
+  height: calc(100% - var(--docs-and-api-menu-height) - 5px);
+  border: none;
+}
+
+.breakWord {
+  overflow-wrap: break-word;
 }

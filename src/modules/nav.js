@@ -5,11 +5,10 @@ const Nav = () => {
   const links = [
     { path: '/modules/descriptors', label: 'Descriptors' },
     { path: '/modules/miniscript', label: 'Miniscript' },
-    { path: '/modules/secp256k1', label: 'Secp256k1' },
     { path: '/modules/discovery', label: 'Discovery' },
     { path: '/modules/explorer', label: 'Explorer' },
+    { path: '/modules/secp256k1', label: 'Secp256k1' },
     { path: '/modules/coinselect', label: 'Coinselect' },
-    { path: '/modules/fees', label: 'Fees' }
   ];
 
   return (
