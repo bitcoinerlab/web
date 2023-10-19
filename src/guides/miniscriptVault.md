@@ -116,7 +116,7 @@ const unvaultMasterNode = BIP32.fromSeed(
 const unvaultKey = unvaultMasterNode.derivePath(
   `m${WSH_ORIGIN_PATH}${WSH_KEY_PATH}`
 ).publicKey;
-const wshExpression = `wsh(${miniscript
+const wshDescriptor = `wsh(${miniscript
   .replace(
     '@unvaultKey',
     descriptors.keyExpressionBIP32({
@@ -126,8 +126,8 @@ const wshExpression = `wsh(${miniscript
     })
   )
   .replace('@emergencyKey', emergencyPair.publicKey.toString('hex'))})`;
-const wshDescriptor = new Descriptor({
-  expression: wshExpression,
+const wshOutput = new Output({
+  descriptor: wshDescriptor,
   network,
   signersPubKeys: [EMERGENCY_RECOVERY ? emergencyPair.publicKey : unvaultKey]
 });
@@ -137,7 +137,7 @@ In the code above:
 
 1. We derive the public key for the unvaulting wallet using the unvault master node and the specified derivation path. The unvaulting wallet is the one that can be used to spend the locked UTXO after the timelock expires.
 
-2. We replace the `@unvaultKey` and `@emergencyKey` placeholders in the `wshExpression` with their appropriate key expressions. The `wshExpression` is a structured format that describes the rules and conditions required to spend an output in a transaction. This format is called a **Bitcoin descriptor** and is specified in the [Bitcoin Core documentation](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md).
+2. We replace the `@unvaultKey` and `@emergencyKey` placeholders in the `wshDescriptor` with their appropriate key expressions. The `wshDescriptor` is a structured format that describes the rules and conditions required to spend an output in a transaction. This format is called a **Bitcoin descriptor** and is specified in the [Bitcoin Core documentation](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md).
 
 3. We create a new descriptor object with the updated expression.
 
@@ -156,7 +156,7 @@ Note that in order to test different configurations, you can set `EMERGENCY_RECO
 In the previous section, we generated a timelocked Vault using Miniscript and created a descriptor for a WSH output. Now, we will fund the timelocked Vault.
 
 ```typescript
-const wshAddress = wshDescriptor.getAddress();
+const wshAddress = wshOutput.getAddress();
 Log(`Fund your vault. Let's first check if it's been already funded...`);
 const utxo = await(
   await fetch(`${EXPLORER}/api/address/${wshAddress}/utxo`)
@@ -183,21 +183,25 @@ const txHex = await(
 ).text();
 const inputValue = utxo[0].value;
 const psbt = new Psbt({ network });
-wshDescriptor.updatePsbt({ psbt, txHex, vout: utxo[0].vout });
+const inputFinalizer = wshOutput.updatePsbtAsInput({ psbt, txHex, vout: utxo[0].vout });
 //For the purpose of this guide, we add an output to send funds to hardcoded
 //addresses, which we don't care about, just to show how to use the API. Don't
 //forget to account for transaction fees!
-psbt.addOutput({
-  address: EMERGENCY_RECOVERY
-    ? 'mkpZhYtJu2r87Js3pDiWJDmPte2NRZ8bJV'
-    : 'tb1q4280xax2lt0u5a5s9hd4easuvzalm8v9ege9ge',
-  value: inputValue - 1000
-});
+new Output({
+  descriptor: `addr(${
+    EMERGENCY_RECOVERY
+      ? 'mkpZhYtJu2r87Js3pDiWJDmPte2NRZ8bJV'
+      : 'tb1q4280xax2lt0u5a5s9hd4easuvzalm8v9ege9ge'
+  })`,
+  network
+}).updatePsbtAsOutput({ psbt, value: inputValue - 1000 });
 ```
 
 In the code above, we make use of Partially Signed Bitcion Transactions (PSBT)s to create the spending transaction. PSBTs come in handy when working with descriptors, especially when using scripts, because they allow multiple parties to collaborate in the signing process. This is particularly useful for [more complex scenarios](/guides/ledger-programming) than the one in this guide.
 
-We subtract 1000 satoshis from the input value to account for transaction mining fees and set up the PSBT by using `updatePsbt`, which sets up the descriptor as one of its input. We then add an output to the PSBT that will send the funds to a certain hardcoded address that we don't care about, just for the purposes of demonstrating how to use the library API.
+We subtract 1000 satoshis from the input value to account for transaction mining fees and set up the PSBT by using `updatePsbtAsInput`, which sets up the descriptor as one of its input. We then add an output to the PSBT that will send the funds to a certain hardcoded address that we don't care about, just for the purposes of demonstrating how to use the library API.
+
+Note that `updatePsbtAsInput` returns a finalizer function. We will use this method in the following section.
 
 ## Signing, Finalizing and Pushing the PSBT
 
@@ -214,7 +218,7 @@ The above code block signs the PSBT with the appropriate key. Once the PSBT is s
 
 ```typescript
 //Finalize the tx (compute & add the scriptWitness) & push to the blockchain
-wshDescriptor.finalizePsbtInput({ index: 0, psbt });
+inputFinalizer({ psbt });
 const spendTx = psbt.extractTransaction();
 const spendTxPushResult = await(
   await fetch(`${EXPLORER}/api/tx`, {
@@ -224,9 +228,9 @@ const spendTxPushResult = await(
 ).text();
 ```
 
-The code above finalizes the input using the `finalizePsbtInput` method. Finalizing the input involves adding the `scriptSig` or `scriptWitness` (in the case of Segwit), which is necessary to prove ownership of the UTXO being spent. This is an essential step, as it verifies that the transaction is complete and ready for broadcasting.
+The code above finalizes the input using the `inputFinalizer` method. Finalizing the input involves adding the `scriptSig` or `scriptWitness` (in the case of Segwit), which is necessary to prove ownership of the UTXO being spent. This is an essential step, as it verifies that the transaction is complete and ready for broadcasting.
 
-The `finalizePsbtInput` method will provide different solutions depending on the `signersPubKeys` signaled when creating the descriptor object.
+The `inputFinalizer` method will provide different solutions depending on the `signersPubKeys` signaled when creating the descriptor object.
 
 After finalizing the input, we only need to push the transaction to the Bitcoin network. Once done, we check if it was accepted or rejected due to it being non-final. Miners will reject a transaction with a 'non-final' error if the timelock is not respected. If the transaction was rejected, we inform the user that they need to wait 5 blocks before trying again. If the transaction was successful, we display a link to the transaction on the blockchain explorer for verification.
 

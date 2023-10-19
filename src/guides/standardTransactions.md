@@ -1,5 +1,4 @@
 # Programming Standard Transactions
-
 This guide will walk you through an example of using the [@bitcoinerlab/descriptors](https://bitcoinerlab.com/modules/descriptors) library to create a Bitcoin transaction that moves funds from a Legacy address to a Segwit address.
 
 ## What You Will Learn
@@ -40,8 +39,8 @@ In this guide, we will fund the address under this BIP32 path: `44'/1'/0'/0/1`. 
 To create a descriptor to generate the Legacy address where the initial funds will be sent:
 
 ```typescript
-const descriptorLegacy = new Descriptor({
-  expression: pkhBIP32({ masterNode, network, account: 0, keyPath: '/0/1' }),
+const legacyOutput = new Output({
+  descriptor: pkhBIP32({ masterNode, network, account: 0, keyPath: '/0/1' }),
   network
 });
 ```
@@ -50,7 +49,7 @@ const descriptorLegacy = new Descriptor({
 
 Instead of passing `{keyPath: '0/1'}`, we could have also used `{change: 0, index: 1}`.
 
-By running `descriptorLegacy.getAddress()`, we can obtain the corresponding Bitcoin address, `moovc1JqGrz4v6FA2U8ks8ZqjSwjv3yRKQ`. We have already sent some funds to this address, so you don't need to perform this step yourself. You can verify the transaction that funded the address using a [block explorer](https://tinyurl.com/mu82nmzw).
+By running `legacyOutput.getAddress()`, we can obtain the corresponding Bitcoin address, `moovc1JqGrz4v6FA2U8ks8ZqjSwjv3yRKQ`. We have already sent some funds to this address, so you don't need to perform this step yourself. You can verify the transaction that funded the address using a [block explorer](https://tinyurl.com/mu82nmzw).
 
 To confirm the generated address from the mnemonic and key path provided, you can use [Ian Coleman's BIP39 Tool](https://iancoleman.io/bip39/) (make sure to select "Testnet" as the coin type).
 
@@ -75,7 +74,7 @@ const txJson = await(await fetch(`${EXPLORER}/api/tx/${TXID}`)).json() as {
 const txOuts = txJson.vout;
 const vout = txOuts.findIndex(
   txOut =>
-    txOut.scriptpubkey === descriptorLegacy.getScriptPubKey().toString('hex')
+    txOut.scriptpubkey === legacyOutput.getScriptPubKey().toString('hex')
 );
 const initialValue = txOuts[vout]!.value; //This must be: 1679037
 ```
@@ -95,8 +94,8 @@ Now that we have the UTXO information, we can create a transaction that spends i
 First, we define the Segwit descriptor where we will move the funds:
 
 ```typescript
-const descriptorSegwit = new Descriptor({
-  expression: wpkhBIP32({ masterNode, network, account: 0, keyPath: '/1/0' }),
+const segwitOutput = new Output({
+  descriptor: wpkhBIP32({ masterNode, network, account: 0, keyPath: '/1/0' }),
   network
 });
 ```
@@ -110,15 +109,14 @@ const psbt = new Psbt({ network });
 We use the Legacy descriptor to update the transaction with the input information:
 
 ```typescript
-const legacyInputNumber = descriptorLegacy.updatePsbt({ psbt, vout, txHex });
+const legacyInputFinalizer = legacyOutput.updatePsbtAsInput({ psbt, vout, txHex });
 ```
 
 Now we add our Segwit address as the new output and provide a transaction fee for the miners:
 
 ```typescript
 const finalValue = initialValue - FEE;
-const finalAddress = descriptorSegwit.getAddress();
-psbt.addOutput({ address: finalAddress, value: finalValue });
+segwitOutput.updatePsbtAsOutput({ psbt, value: finalValue });
 ```
 
 To sign the transaction, we use the `signBIP32` method. This method signs the PSBT using the master node (derived from the mnemonic) and the key path specified.
@@ -127,12 +125,12 @@ To sign the transaction, we use the `signBIP32` method. This method signs the PS
 descriptors.signers.signBIP32({ psbt, masterNode });
 ```
 
-After signing the transaction, we need to finalize the input using the `finalizePsbtInput` method. Finalizing the input involves several steps, including adding the `scriptSig` or `scriptWitness`. The `scriptSig` is a part of the transaction input that contains the unlocking script, which proves the ownership of the UTXO being spent. In the case of Segwit transactions, the unlocking script is called the `scriptWitness`.
+After signing the transaction, we need to finalize the input using the `legacyInputFinalizer()` method that has been returned from `updatePsbtAsInput`. Finalizing the input involves several steps, including adding the `scriptSig` or `scriptWitness`. The `scriptSig` is a part of the transaction input that contains the unlocking script, which proves the ownership of the UTXO being spent. In the case of Segwit transactions, the unlocking script is called the `scriptWitness`.
 
-Finalizing the input means that all required signatures are present, the `scriptSig` or `scriptWitness` has been added, and the input is ready to be included in the transaction. This is an essential step, as it verifies that the transaction is complete and ready for broadcasting.
+Finalizing the input means that all required signatures are present, the `scriptSig` or `scriptWitness` has been added, and the input is ready to be included in the transaction. This is an essential step, as it makes sure that the transaction is complete and ready for broadcasting.
 
 ```typescript
-descriptorLegacy.finalizePsbtInput({ psbt, index: legacyInputNumber });
+legacyInputFinalizer({ psbt });
 ```
 
 Please note that when you try this, the transaction won't be accepted again, as it has already been spent:
