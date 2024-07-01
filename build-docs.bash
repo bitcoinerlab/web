@@ -4,7 +4,7 @@
 CURRENT_DIR=$(pwd)
 
 # Directories to process
-declare -a dirs=("descriptors" "discovery" "miniscript" "explorer")
+declare -a dirs=("descriptors" "coinselect" "discovery" "miniscript" "explorer")
 
 # Loop over each directory
 for dir in "${dirs[@]}"; do

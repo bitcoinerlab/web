@@ -31,13 +31,11 @@ const Home = () => {
           <h5>@landabaso</h5>
           <p>Telecom Eng. PhD in Computer Vision.</p>
           <p>
-            Developing FarVault, a Bitcoin Vault to protect against theft &
-            extortion. Open-sourcing the libs via{" "}
-            <a href="https://bitcoinerlab.com">BitcoinerLab.com</a>. Also,
-            creator of{" "}
-            <a href="https://www.labolsavirtual.com">LaBolsaVirtual.com</a>.
+            Developing a Bitcoin Wallet that can rewind transactions for theft &
+            extortion protection. Open-sourcing the libs via{" "}
+            <a href="https://bitcoinerlab.com">BitcoinerLab.com</a>.
             <br />
-            I'm also the guy behind{" "}
+            Also, I'm the guy behind{" "}
             <a href="https://labolsavirtual.com/">LaBolsaVirtual.com</a>.
           </p>
           <div className="socialButtons">
