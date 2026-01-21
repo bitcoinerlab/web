@@ -6,6 +6,7 @@ import { string } from 'rollup-plugin-string';
 
 export default {
   input: 'src/server.entry.js',
+  external: ['mermaid'],
   output: {
     file: 'dist/server.bundle.js',
     format: 'cjs',

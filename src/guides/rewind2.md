@@ -70,13 +70,13 @@ confirmation constraints and makes it faster to demo.
 ### OP_RETURN + TRUC
 
 TRUC is a newer relay policy (active since Bitcoin Core 28) that lets you submit
-small 1-parent-1-child packages as a unit, allowing 0-fee parents when the child
+small 1‑parent‑1‑child packages as a unit, allowing 0‑fee parents when the child
 pays enough.
 
-This strategy uses a two-tx package where the vault transaction is the parent
+This strategy uses a two‑tx package where the vault transaction is the parent
 and the OP_RETURN backup transaction is the child. It stores the backup payload
 in a single OP_RETURN transaction and uses TRUC rules to link it to the vault
-transaction (the one with the to-be-deleted setup key). See the flow diagram
+transaction (the one with the to‑be‑deleted setup key). See the flow diagram
 below.
 
 ```mermaid
@@ -134,9 +134,9 @@ flowchart LR
 
 Pros:
 
-- Parent (`Vault Tx`) can be 0-fee, allowing fee shifting to the backup
+- Parent (`Vault Tx`) can be 0‑fee, allowing fee shifting to the backup
   transaction and ensuring (in practice) that a vault is not created unless the
-  backup exists. Miners could still include a 0-fee parent without a subsidizing
+  backup exists. Miners could still include a 0‑fee parent without a subsidizing
   child but it is unlikely in practice.
 
 Cons:
@@ -169,10 +169,10 @@ Cons:
 
 Inscriptions use a commit+reveal chain with the payload in the reveal
 transaction witness. Fee shifting uses minimum relay fees on the vault and
-commit transactions and a higher-fee reveal transaction for CPFP.
+commit transactions and a higher‑fee reveal transaction for CPFP.
 
 The reveal transaction creates a small OP_RETURN padding output. The padding
-is just garbage data used to avoid Core's `tx-size-small` policy (non-witness
+is just garbage data used to avoid Core's `tx-size-small` policy (non‑witness
 size must be >= 65 bytes).
 
 ```mermaid
@@ -248,7 +248,7 @@ Cons:
 
 ## Fee shifting to the end of the chain
 
-This section dives a bit deeper on fee-shifting and why it improves backup
+This section dives a bit deeper on fee‑shifting and why it improves backup
 reliability.
 
 To maximize the odds that the backup is mined, Rewind 2 shifts most fees to the
@@ -263,16 +263,16 @@ rate via CPFP. This means:
 
 ## Vault Design Details
 
-This section focuses on the vault-specific aspects of the on-chain backup
+This section focuses on the vault‑specific aspects of the on‑chain backup
 design.
 
 ### Fee Anchors for Trigger and Panic (P2A)
 
 The trigger and panic transactions include a P2A output, a bare script that
-creates an anyone-can-spend anchor. These transactions are pre-signed at setup
+creates an anyone‑can‑spend anchor. These transactions are pre‑signed at setup
 time, but the fee environment at broadcast time is unknown. A P2A anchor lets
 the wallet attach a child transaction later to bump the effective feerate via
-CPFP, without changing the pre-signed tx. This keeps the pre-signed path valid
+CPFP, without changing the pre‑signed tx. This keeps the pre‑signed path valid
 while still allowing fee adjustment when it's actually needed.
 
 In practice, the trigger/panic are broadcast as pre-signed 0-fee parents. A CPFP
