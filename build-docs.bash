@@ -3,6 +3,10 @@
 # Get current working directory
 CURRENT_DIR=$(pwd)
 
+# Refresh rewind2 guide content from playground
+cp "${CURRENT_DIR}/../playground/descriptors/rewind2/README.md" \
+  "${CURRENT_DIR}/src/guides/rewind2.md"
+
 # Directories to process
 declare -a dirs=("descriptors" "coinselect" "discovery" "miniscript" "explorer")
 
@@ -25,4 +29,3 @@ for dir in "${dirs[@]}"; do
   # Navigate back to the initial directory
   cd "${CURRENT_DIR}"
 done
-

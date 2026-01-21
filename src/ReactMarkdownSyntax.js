@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/prism-light';
 import typescript from 'react-syntax-highlighter/dist/cjs/languages/prism/typescript';
 import bash from 'react-syntax-highlighter/dist/cjs/languages/prism/bash';
+import Mermaid from './Mermaid';
 SyntaxHighlighter.registerLanguage('javascript', typescript);
 SyntaxHighlighter.registerLanguage('typescript', typescript);
 SyntaxHighlighter.registerLanguage('bash', bash);
@@ -28,6 +29,9 @@ export default props => {
       components={{
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
+          if (!inline && match && match[1] === 'mermaid') {
+            return <Mermaid chart={String(children).trim()} />;
+          }
           return !inline && match ? (
             <SyntaxHighlighter
               children={String(children).replace(/\n$/, '')}
