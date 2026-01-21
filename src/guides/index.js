@@ -7,6 +7,7 @@ import MiniscriptVault from "./miniscriptVault";
 import LedgerProgramming from "./ledgerProgramming";
 import MultiSigFallbackTimelock from "./multisigFallbackTimelock";
 import P2A from "./p2a";
+import Rewind2 from "./rewind2";
 const Guides = () => (
   <div className="nav-article">
     <Nav />
@@ -35,11 +36,20 @@ const Guides = () => (
                   , for creating a Bitcoin TimeLocked Vault using Miniscript,
                   protecting users against extortion and coin theft.
                   <li>
-                    <Link to="/guides/p2a">Zero-Fee Transactions: TRUC + P2A Fee Bumping Demo</Link>,
-                    for learning how to build and broadcast a v3 (TRUC) parent
+                    <Link to="/guides/p2a">
+                      Zero-Fee Transactions: TRUC + P2A Fee Bumping Demo
+                    </Link>
+                    , for learning how to build and broadcast a v3 (TRUC) parent
                     transaction with zero fees and a P2A child transaction that
                     pays the fee as a 1P1C package.
                   </li>{" "}
+                  <li>
+                    <Link to="/guides/rewind2">
+                      On-chain Wallet Backup Strategies
+                    </Link>
+                    , for exploring on-chain backup techniques for vault-enabled
+                    wallets and how Rewind 2 restores from a mnemonic alone.
+                  </li>
                 </li>
                 <li>
                   <Link to="/guides/ledger-programming">
@@ -62,6 +72,7 @@ const Guides = () => (
           }
         ></Route>
         <Route path="/p2a" element={<P2A />} />
+        <Route path="/rewind2" element={<Rewind2 />} />
         <Route path="/ledger-programming" element={<LedgerProgramming />} />
         <Route
           path="/standard-transactions"

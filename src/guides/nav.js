@@ -12,6 +12,10 @@ const Nav = () => {
       path: "/guides/p2a",
       label: "Zero-Fee Transactions: TRUC and P2A",
     },
+    {
+      path: "/guides/rewind2",
+      label: "On-chain Wallet Backup Strategies",
+    },
     { path: "/guides/ledger-programming", label: "Programming a Ledger Nano" },
     {
       path: "/guides/multisig-fallback-timelock",

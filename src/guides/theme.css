@@ -97,3 +97,19 @@
   border: 0;
   overflow: hidden;
 }
+
+.guide .main .mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.guide .main .mermaid svg {
+  width: 100%;
+  height: auto;
+}
+
+.guide .main .mermaid-fallback {
+  background: #f5f5f5;
+  padding: 1rem;
+  overflow-x: auto;
+}
