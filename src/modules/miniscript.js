@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Embed from 'react-runkit';
+import React, { useState, useRef } from 'react';
+import Playground from '../Playground';
 
 const policies = [
   { policy: 'pk(key_1)', description: 'A single key' },
@@ -60,9 +60,11 @@ const buildSource = (
   unknowns = []
 ) => `//Edit this code as you wish and then click on "run" below
 
-//npm install @bitcoinerlab/miniscript
-const { compilePolicy, compileMiniscript, satisfier } =
-  require("@bitcoinerlab/miniscript");
+//npm install @bitcoinerlab/miniscript @bitcoinerlab/miniscript-policies
+const { compilePolicy, ready } = require("@bitcoinerlab/miniscript-policies");
+const { compileMiniscript, satisfier } = require("@bitcoinerlab/miniscript");
+
+await ready;
 
 //${description}
 const policy = "${policy}";
@@ -72,16 +74,21 @@ ${
     : `const unknowns = ${JSON.stringify(unknowns)};
 `
 }
-const { miniscript, asm, issane } = compilePolicy(policy);
-//const { asm, issane } = compileMiniscript(miniscript);
+const { miniscript } = compilePolicy(policy);
+const { asm, issane } = compileMiniscript(miniscript);
 
 if (issane) {
+  // Debugging: computeUnknowns is true to surface pruned solutions.
   const { nonMalleableSats, malleableSats${
     unknowns.length ? ', unknownSats' : ''
-  } } = satisfier( miniscript${unknowns.length ? ', { unknowns }' : ''} );
-  ({ miniscript, asm, nonMalleableSats, malleableSats${
+  } } = satisfier( miniscript${
+    unknowns.length
+      ? ', { unknowns, computeUnknowns: true }'
+      : ', { computeUnknowns: true }'
+  } );
+  console.log({ miniscript, asm, nonMalleableSats, malleableSats${
     unknowns.length ? ', unknownSats' : ''
-  } }); //Show results
+  } });
 }`;
 
 const WuillesDemos = ({ setSource }) => {
@@ -110,61 +117,54 @@ const Miniscript = () => {
       policies[0].unknowns
     )
   );
-  const [runkitHeight, setRunkitHeight] = useState(130);
-  //This is when the RunKit script has been laoded is ready for commands:
-  const [runkitScriptLoaded, setRunkitScriptLoaded] = useState(
-    typeof window !== 'undefined' && window.RunKit
-  );
-  //This is when the RunKit engine is ready for commands:
-  const [runkitReady, setRunkitReady] = useState(false);
+  const [playgroundHeight, setPlaygroundHeight] = useState(130);
 
   //The parent div
-  const runkitRef = useRef(null);
-  //The runkit itself
-  const embedRef = useRef(null);
+  const playgroundContainerRef = useRef(null);
+  //The playground itself
+  const playgroundRef = useRef(null);
 
-  const run = () => embedRef.current.evaluate();
-  const onLoad = () => {
-    setRunkitReady(true);
-    run();
-  };
-
-  const runkitEvaluated = () => {
-    //Keep the largest height so that it does not flicker
-    setRunkitHeight(runkitRef.current.offsetHeight);
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !runkitScriptLoaded) {
-      const script = document.createElement('script');
-      script.src = 'https://embed.runkit.com';
-      script.async = true;
-      script.onload = () => setRunkitScriptLoaded(true);
-      document.body.appendChild(script);
+  const run = nextSource => {
+    if (playgroundRef.current) {
+      playgroundRef.current.evaluate(nextSource);
     }
-  }, []);
+  };
+
+  const onLoad = () => run();
+
+  const playgroundEvaluated = () => {
+    if (!playgroundContainerRef.current) return;
+    setPlaygroundHeight(height =>
+      Math.max(height, playgroundContainerRef.current.offsetHeight)
+    );
+  };
   return (
     <div>
       <h1>Miniscript</h1>
       <p>
-        This project is a JavaScript implementation of{' '}
+        This project is a TypeScript implementation of{' '}
         <a href="https://bitcoin.sipa.be/miniscript/">Bitcoin Miniscript</a>, a
-        high-level language for describing Bitcoin spending conditions.
+        structured language for describing Bitcoin spending conditions.
       </p>
       <p>
-        It includes a novel Miniscript Satisfier for generating explicit script
-        witnesses that are decoupled from the tx signer, as well as a
-        transpilation of{' '}
-        <a href="https://github.com/sipa/miniscript">Peter Wuille's C++ code</a>{' '}
-        for compiling spending policies into Miniscript and Bitcoin scripts.
+        It includes a compiler and static analyzer, plus a signer-agnostic
+        satisfier that produces symbolic witness stacks (for example{' '}
+        <code>&lt;sig(key)&gt; &lt;sha256_preimage(H)&gt;</code>), so you can
+        reason about valid spends without private keys.
       </p>
       <h2>Features</h2>
       <ul>
-        <li>Compile Policies into Miniscript and Bitcoin scripts.</li>
+        <li>Compile Miniscript into Bitcoin script (ASM).</li>
         <li>
-          A Miniscript Satisfier that discards malleable solutions and is able
-          to generate explicit witnesses from Miniscripts using variables, such
-          as <code>pk(key)</code>.
+          Analyze Miniscript for sanity and malleability via the static type
+          system.
+        </li>
+        <li>
+          Generate symbolic witness stacks with <code>satisfier</code>,
+          including non-malleable solutions.
+        </li>
+        <li>
+          Tapscript support.
         </li>
       </ul>
       <h2>Documentation</h2>
@@ -173,8 +173,9 @@ const Miniscript = () => {
         <a href="https://github.com/bitcoinerlab/miniscript">
           its Github repository
         </a>
-        . In addition, you can use the playground on this page to experiment
-        with the module and try out its features.
+        . For a complete understanding and the latest API, please read the
+        official README. In addition, you can use the playground on this page
+        to experiment with the module and try out its features.
       </p>
       <h2>Playground</h2>
       Let's consider the policies used for demonstration in{' '}
@@ -182,28 +183,23 @@ const Miniscript = () => {
       some more that include unknown pieces of information (referred to as{' '}
       <code>unknowns</code>).
       <WuillesDemos
-        setSource={source => {
-          if (runkitReady) {
-            setSource(source);
-            run();
-          }
+        setSource={nextSource => {
+          setSource(nextSource);
+          run(nextSource);
         }}
       />
       <div
         className="runkit"
-        ref={runkitRef}
-        style={{ minHeight: runkitHeight + 'px' }}
+        ref={playgroundContainerRef}
+        style={{ minHeight: playgroundHeight + 'px' }}
       >
-        {!runkitReady && <div>Loading Playground environment...</div>}
-        {runkitScriptLoaded && (
-          <Embed
-            gutterStyle="inside"
-            source={source}
-            ref={embedRef}
-            onLoad={onLoad}
-            onEvaluate={runkitEvaluated}
-          />
-        )}
+        <Playground
+          source={source}
+          onSourceChange={setSource}
+          ref={playgroundRef}
+          onLoad={onLoad}
+          onEvaluate={playgroundEvaluated}
+        />
       </div>
     </div>
   );
