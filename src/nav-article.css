@@ -70,6 +70,91 @@
 .nav-article article .runkit {
   overflow: hidden;
 }
+.nav-article article .playground {
+  border: 1px solid #e2e2e2;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 6%);
+}
+.nav-article article .playground-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background: #f7f7f7;
+  border-bottom: 1px solid #e2e2e2;
+  gap: 1rem;
+}
+.nav-article article .playground-section {
+  border-top: 1px solid #e2e2e2;
+}
+.nav-article article .playground-section-title {
+  padding: 0.6rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #f4f4f4;
+  color: #444;
+  border-bottom: 1px solid #e2e2e2;
+}
+.nav-article article .playground-toolbar button {
+  line-height: 3rem;
+  min-width: 7rem;
+  padding: 0 1rem;
+}
+.nav-article article .playground-status {
+  font-size: 1.2rem;
+  color: #666;
+}
+.nav-article article .playground-editor {
+  border: 0;
+  background: #fbfbfb;
+  box-sizing: border-box;
+}
+.nav-article article .playground-editor .cm-editor {
+  background: #fbfbfb;
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+.nav-article article .playground-editor .cm-scroller {
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  min-height: 18rem;
+}
+.nav-article article .playground-editor .cm-content {
+  padding: 1rem;
+}
+.nav-article article .playground-editor .cm-gutters {
+  display: none;
+}
+.nav-article article .playground-editor .cm-editor.cm-focused {
+  outline: none;
+}
+.nav-article article .playground-output {
+  padding: 1rem;
+  font-size: 1.3rem;
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background: #fcfcfc;
+  color: #222;
+  min-height: 6rem;
+}
+.nav-article article .playground-output-line {
+  margin: 0 0 0.6rem 0;
+  white-space: pre-wrap;
+}
+.nav-article article .playground-output-line:last-child {
+  margin-bottom: 0;
+}
+.nav-article article .playground-output-line.warn {
+  color: #a36a00;
+}
+.nav-article article .playground-output-line.error {
+  color: #b00020;
+}
+.nav-article article .playground-output-placeholder {
+  color: #888;
+}
 @media (max-width: 500px) {
   .nav-article {
     flex-direction: column;

@@ -9,6 +9,7 @@ import './styles.css';
 import './icons.css';
 import './nav-article.css'; //For guides and modules
 import './guides/theme.css'; //For codesandbox
+import '@codemirror/view/style.css';
 //import 'highlight.js/styles/default.css'; //For react-markdown (the readme.md parser)
 
 hydrateRoot(

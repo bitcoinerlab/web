@@ -15,7 +15,6 @@ SyntaxHighlighter.registerLanguage('bash', bash);
 //https://github.com/PrismJS/prism-themes
 import { materialOceanic as prismStyle } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 //Hydration errors are because of this: https://www.youtube.com/watch?v=eGWG22olL0o&t=310s
-//It is the runkit thingy: <script src="https://embed.runkit.com"></script>
 
 import rehypeRaw from 'rehype-raw'; //So that <details><summary> tags work
 //import remarkGfm from 'remark-gfm'; //So that tables can be rendered. Include it as this: remarkPlugins={[remarkGfm]}

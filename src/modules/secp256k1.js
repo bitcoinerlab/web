@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Embed from 'react-runkit';
+import React, { useState, useRef } from 'react';
+import Playground from '../Playground';
 
-const source = `const ecc = require('@bitcoinerlab/secp256k1');
+const initialSource = `const ecc = require('@bitcoinerlab/secp256k1');
 const { BIP32Factory } = require('bip32');
 const { ECPairFactory } = require('ecpair');
 const BIP32 = BIP32Factory(ecc);
@@ -14,40 +14,30 @@ const node = BIP32.fromBase58(
   'xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi'
 );
 
-( { keyPair1, node } ); //Show results
+console.log({ keyPair1, node });
 `;
 
 const Secp256k1 = () => {
-  const [runkitHeight, setRunkitHeight] = useState(130);
-  const [runkitScriptLoaded, setRunkitScriptLoaded] = useState(
-    typeof window !== 'undefined' && window.RunKit
-  );
-  const [runkitReady, setRunkitReady] = useState(false);
+  const [source, setSource] = useState(initialSource);
+  const [playgroundHeight, setPlaygroundHeight] = useState(130);
 
   //The parent div
-  const runkitRef = useRef(null);
-  //The runkit itself
-  const embedRef = useRef(null);
+  const playgroundContainerRef = useRef(null);
+  //The playground itself
+  const playgroundRef = useRef(null);
 
   const onLoad = () => {
-    setRunkitReady(true);
-    embedRef.current.evaluate();
-  };
-
-  const runkitEvaluated = () => {
-    //Keep the largest height so that it does not flicker
-    setRunkitHeight(runkitRef.current.offsetHeight);
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !runkitScriptLoaded) {
-      const script = document.createElement('script');
-      script.src = 'https://embed.runkit.com';
-      script.async = true;
-      script.onload = () => setRunkitScriptLoaded(true);
-      document.body.appendChild(script);
+    if (playgroundRef.current) {
+      playgroundRef.current.evaluate();
     }
-  }, []);
+  };
+
+  const playgroundEvaluated = () => {
+    if (!playgroundContainerRef.current) return;
+    setPlaygroundHeight(height =>
+      Math.max(height, playgroundContainerRef.current.offsetHeight)
+    );
+  };
   return (
     <div>
       <h1>Secp256k1</h1>
@@ -105,20 +95,16 @@ const Secp256k1 = () => {
       <h2>Playground</h2>
       <div
         className="runkit"
-        ref={runkitRef}
-        style={{ minHeight: runkitHeight + 'px' }}
+        ref={playgroundContainerRef}
+        style={{ minHeight: playgroundHeight + 'px' }}
       >
-        {!runkitReady && <div>Loading Playground environment...</div>}
-        {runkitScriptLoaded && (
-          <Embed
-            gutterStyle="inside"
-            source={source}
-            ref={embedRef}
-            onLoad={onLoad}
-            onEvaluate={runkitEvaluated}
-            nodeVersion=">=12"
-          />
-        )}
+        <Playground
+          source={source}
+          onSourceChange={setSource}
+          ref={playgroundRef}
+          onLoad={onLoad}
+          onEvaluate={playgroundEvaluated}
+        />
       </div>
     </div>
   );
