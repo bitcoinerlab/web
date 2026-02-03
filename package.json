@@ -6,7 +6,7 @@
     "url": "https://bitcoinerlab.com"
   },
   "description": "BitcoinerLAB Web",
-  "version": "4.2.0",
+  "version": "5.0.0",
   "homepage": "https://bitcoinerlab.com",
   "license": "MIT",
   "scripts": {
@@ -48,12 +48,16 @@
     "rollup-plugin-string": "^3.0.0"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.4",
+    "@codemirror/state": "^6.5.4",
+    "@codemirror/view": "^6.39.12",
+    "codemirror": "^6.0.2",
+    "esbuild-wasm": "^0.27.2",
     "mermaid": "^11.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.4.5",
-    "react-runkit": "github:veksen/react-runkit",
     "react-syntax-highlighter": "^15.5.0",
     "rehype-raw": "^6.1.1"
   }

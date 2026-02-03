@@ -26,7 +26,7 @@ export default {
       preventAssignment: true,
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
-    resolve(),
+    resolve({ browser: true }),
     babel({
       //https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
       babelHelpers: 'bundled',
@@ -42,7 +42,10 @@ export default {
       minimize: isProduction // Minify the CSS
     }),
     copy({
-      targets: [{ src: 'resources/*', dest: 'dist/public' }]
+      targets: [
+        { src: 'resources/*', dest: 'dist/public' },
+        { src: 'node_modules/esbuild-wasm/esbuild.wasm', dest: 'dist/public' }
+      ]
     })
   ]
 };
