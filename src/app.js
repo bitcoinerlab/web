@@ -23,7 +23,7 @@ const App = () => {
                 <title>BitcoinerLAB</title>
                 <meta
                   name="description"
-                  content="BitcoinerLAB simplifies the Bitcoin development process by providing a set of Javascript modules that enable the creation of Bitcoin applications."
+                  content="BitcoinerLAB simplifies the Bitcoin development process by providing a set of TypeScript modules that enable the creation of Bitcoin applications."
                 />
               </>
             }
