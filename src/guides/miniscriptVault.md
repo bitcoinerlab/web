@@ -83,13 +83,14 @@ This function returns a policy, given a certain `after` number. A policy is comp
 
 In this section, we'll compile the policy to [Miniscript](https://bitcoin.sipa.be/miniscript/). Miniscript is a language for expressing Bitcoin Scripts in a structured way, enabling analysis, composition, generic signing, and more. The relationship between policies and Miniscript is that policies provide a human-readable way of expressing conditions, while Miniscript offers a machine-readable representation (though very similar to the Policy language) that can be directly translated into Bitcoin Script.
 
-To compile the policy, we will fetch the current block height from the Blockstream Bitcoin Explorer. This information will be used to set the `after` parameter in the policy.
+To compile the policy, we will fetch the current block height from the TAPE Esplora API. This information will be used to set the `after` parameter in the policy.
 
 ```typescript
-const EXPLORER = 'https://blockstream.info/testnet';
+const EXPLORER = 'https://tape.rewindbitcoin.com/explorer';
+const ESPLORA_API = 'https://tape.rewindbitcoin.com/api';
 const BLOCKS = 5;
 const currentBlockHeight = parseInt(
-  await(await fetch(`${EXPLORER}/api/blocks/tip/height`)).text()
+  await(await fetch(`${ESPLORA_API}/blocks/tip/height`)).text()
 );
 const after = afterEncode({ blocks: currentBlockHeight + BLOCKS });
 Log(`Current block height: ${currentBlockHeight}`);
@@ -98,13 +99,15 @@ const { miniscript, issane } = compilePolicy(POLICY(after));
 if (!issane) throw new Error(`Error: miniscript not sane`);
 ```
 
-In the code above, we first fetch the current block height from the Blockstream Explorer API. We then set the `after` parameter in the policy by adding a specific number of blocks (`BLOCKS`) to the current block height. Next, we compile the policy into a Miniscript expression using the `compilePolicy` function. We also check if the compiled Miniscript expression is sane, which means it's valid and non-malleable (preventing a third party from modifying an existing script into another valid script, stealthily changing the transaction size). If it's not sane, an error is thrown.
+In the code above, we first fetch the current block height from the TAPE Esplora API. We then set the `after` parameter in the policy by adding a specific number of blocks (`BLOCKS`) to the current block height. Next, we compile the policy into a Miniscript expression using the `compilePolicy` function. We also check if the compiled Miniscript expression is sane, which means it's valid and non-malleable (preventing a third party from modifying an existing script into another valid script, stealthily changing the transaction size). If it's not sane, an error is thrown.
 
 ## Generating the Timelocked Vault Descriptor
 
 In this section, we will generate the timelocked Vault and set up two ways to unvault the funds: either by waiting for the timelock to expire or by using the Panic Button analogy. The following code will be used for this purpose:
 
 ```typescript
+import { toHex } from 'uint8array-tools';
+
 const EMERGENCY_RECOVERY = false; //Set it to true to use the "Panic Button"
 
 const WSH_ORIGIN_PATH = `/69420'/1'/0'`; //This can be any path you like.
@@ -125,7 +128,7 @@ const wshDescriptor = `wsh(${miniscript
       keyPath: WSH_KEY_PATH
     })
   )
-  .replace('@emergencyKey', emergencyPair.publicKey.toString('hex'))})`;
+  .replace('@emergencyKey', toHex(emergencyPair.publicKey))})`;
 const wshOutput = new Output({
   descriptor: wshDescriptor,
   network,
@@ -137,7 +140,7 @@ In the code above:
 
 1. We derive the public key for the unvaulting wallet using the unvault master node and the specified derivation path. The unvaulting wallet is the one that can be used to spend the locked UTXO after the timelock expires.
 
-2. We replace the `@unvaultKey` and `@emergencyKey` placeholders in the `wshDescriptor` with their appropriate key expressions. The `wshDescriptor` is a structured format that describes the rules and conditions required to spend an output in a transaction. This format is called a **Bitcoin descriptor** and is specified in the [Bitcoin Core documentation](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md).
+2. We replace the `@unvaultKey` and `@emergencyKey` placeholders in the `wshDescriptor` with their appropriate key expressions (`toHex` from `uint8array-tools` is used for raw key bytes). The `wshDescriptor` is a structured format that describes the rules and conditions required to spend an output in a transaction. This format is called a **Bitcoin descriptor** and is specified in the [Bitcoin Core documentation](https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md).
 
 3. We create a new descriptor object with the updated expression.
 
@@ -159,18 +162,18 @@ In the previous section, we generated a timelocked Vault using Miniscript and cr
 const wshAddress = wshOutput.getAddress();
 Log(`Fund your vault. Let's first check if it's been already funded...`);
 const utxo = await(
-  await fetch(`${EXPLORER}/api/address/${wshAddress}/utxo`)
+  await fetch(`${ESPLORA_API}/address/${wshAddress}/utxo`)
 ).json();
 if (utxo?.[0]) {
   Log(`Successfully funded. Now let's spend the funds.`);
   //...
 } else {
-  Log(`Not yet! Use https://bitcoinfaucet.uo1.net to send some sats to:`);
+  Log(`Not yet! Use https://tape.rewindbitcoin.com to send some sats to:`);
   Log(`${wshAddress} Fund it & <a href="javascript:start()">check again</a>`);
 }
 ```
 
-In the code above, we retrieve the Bitcoin address corresponding to the WSH descriptor we created earlier, and then check if the corresponding UTXO has already been funded. If it has not, we inform the user that they can use the Bitcoin faucet at https://bitcoinfaucet.uo1.net to send some sats to the address. Once the address has been funded, the user can restart the process by clicking the link provided or by running the Node.js script again.
+In the code above, we retrieve the Bitcoin address corresponding to the WSH descriptor we created earlier, and then check if the corresponding UTXO has already been funded. If it has not, we inform the user that they can use the TAPE faucet at https://tape.rewindbitcoin.com to send some sats to the address. Once the address has been funded, the user can restart the process by clicking the link provided or by running the Node.js script again.
 
 ## Spending the Transaction using a PSBT
 
@@ -179,9 +182,9 @@ If the corresponding UTXO has been funded, we can proceed to show how to spend t
 ```typescript
 Log(`Successfully funded. Now let's spend the funds.`);
 const txHex = await(
-  await fetch(`${EXPLORER}/api/tx/${utxo?.[0].txid}/hex`)
+  await fetch(`${ESPLORA_API}/tx/${utxo?.[0].txid}/hex`)
 ).text();
-const inputValue = utxo[0].value;
+const inputValue = BigInt(utxo[0].value);
 const psbt = new Psbt({ network });
 const inputFinalizer = wshOutput.updatePsbtAsInput({ psbt, txHex, vout: utxo[0].vout });
 //For the purpose of this guide, we add an output to send funds to hardcoded
@@ -190,14 +193,14 @@ const inputFinalizer = wshOutput.updatePsbtAsInput({ psbt, txHex, vout: utxo[0].
 new Output({
   descriptor: `addr(${
     EMERGENCY_RECOVERY
-      ? 'mkpZhYtJu2r87Js3pDiWJDmPte2NRZ8bJV'
-      : 'tb1q4280xax2lt0u5a5s9hd4easuvzalm8v9ege9ge'
+      ? 'bcrt1qn9v3ltz5vw637k0t28qt3jfrksyfvnsyxhl5mf'
+      : 'bcrt1qfz7vd3yxx0dcgdse36k4r66frhh4dkzpn3c3wx'
   })`,
   network
-}).updatePsbtAsOutput({ psbt, value: inputValue - 1000 });
+}).updatePsbtAsOutput({ psbt, value: inputValue - 1000n });
 ```
 
-In the code above, we make use of Partially Signed Bitcion Transactions (PSBT)s to create the spending transaction. PSBTs come in handy when working with descriptors, especially when using scripts, because they allow multiple parties to collaborate in the signing process. This is particularly useful for [more complex scenarios](/guides/ledger-programming) than the one in this guide.
+In the code above, we make use of Partially Signed Bitcoin Transactions (PSBT)s to create the spending transaction. PSBTs come in handy when working with descriptors, especially when using scripts, because they allow multiple parties to collaborate in the signing process. This is particularly useful for [more complex scenarios](/guides/ledger-programming) than the one in this guide.
 
 We subtract 1000 satoshis from the input value to account for transaction mining fees and set up the PSBT by using `updatePsbtAsInput`, which sets up the descriptor as one of its input. We then add an output to the PSBT that will send the funds to a certain hardcoded address that we don't care about, just for the purposes of demonstrating how to use the library API.
 
@@ -221,7 +224,7 @@ The above code block signs the PSBT with the appropriate key. Once the PSBT is s
 inputFinalizer({ psbt });
 const spendTx = psbt.extractTransaction();
 const spendTxPushResult = await(
-  await fetch(`${EXPLORER}/api/tx`, {
+  await fetch(`${ESPLORA_API}/tx`, {
     method: 'POST',
     body: spendTx.toHex()
   })
