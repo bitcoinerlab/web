@@ -407,11 +407,11 @@ childPsbt.setVersion(3);
 childPsbt.addInput({
   hash: parentTransaction.getId(),
   index: 0,
-  witnessUtxo: { script: P2A_SCRIPT, value: 0 },
+  witnessUtxo: { script: P2A_SCRIPT, value: 0n },
 });
 childPsbt.finalizeInput(0, () => ({
-  finalScriptSig: Buffer.alloc(0),
-  finalScriptWitness: Buffer.from([0x00]), // empty item
+  finalScriptSig: new Uint8Array(0),
+  finalScriptWitness: Uint8Array.of(0), // empty item
 }));
 ```
 

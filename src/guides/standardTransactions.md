@@ -61,22 +61,25 @@ We will use the UTXO from the Legacy address, which has been previously funded, 
 
 In the code snippet below, we use the `fetch()` method to call an Esplora Block Explorer API, specifically the Esplora block explorer provided by Blockstream for the Testnet network. You can find more information about the Esplora HTTP API [here](https://github.com/Blockstream/esplora/blob/master/API.md).
 
-This API allows us to obtain the UTXO information we need for our transaction. After the code snippet, we will explain the key elements we require from the transaction data, namely `vout`, `txHex`, and `initialValue`.
+This API allows us to obtain the UTXO information we need for our transaction. In this snippet we use `toHex` from `uint8array-tools` to compare script bytes. After the code snippet, we will explain the key elements we require from the transaction data, namely `vout`, `txHex`, and `initialValue`.
 
 ```typescript
+import { toHex } from 'uint8array-tools';
+
 const EXPLORER = 'https://blockstream.info/testnet';
+const ESPLORA_API = `${EXPLORER}/api`;
 const TXID = 'ee02b5a12c2f22e892bed376781fc9ed435f0d192a1b67ca47a7190804d8e868';
 
-const txHex = await(await fetch(`${EXPLORER}/api/tx/${TXID}/hex`)).text();
-const txJson = await(await fetch(`${EXPLORER}/api/tx/${TXID}`)).json() as {
+const txHex = await (await fetch(`${ESPLORA_API}/tx/${TXID}/hex`)).text();
+const txJson = await (await fetch(`${ESPLORA_API}/tx/${TXID}`)).json() as {
   vout: { scriptpubkey: string; value: number }[];
 };
 const txOuts = txJson.vout;
 const vout = txOuts.findIndex(
   txOut =>
-    txOut.scriptpubkey === legacyOutput.getScriptPubKey().toString('hex')
+    txOut.scriptpubkey === toHex(legacyOutput.getScriptPubKey())
 );
-const initialValue = txOuts[vout]!.value; //This must be: 1679037
+const initialValue = BigInt(txOuts[vout]!.value); //This must be: 1679037n
 ```
 
 With the transaction data fetched, let's understand the role of each key element:
@@ -115,6 +118,7 @@ const legacyInputFinalizer = legacyOutput.updatePsbtAsInput({ psbt, vout, txHex 
 Now we add our Segwit address as the new output and provide a transaction fee for the miners:
 
 ```typescript
+const FEE = 500n;
 const finalValue = initialValue - FEE;
 segwitOutput.updatePsbtAsOutput({ psbt, value: finalValue });
 ```
@@ -138,7 +142,7 @@ Please note that when you try this, the transaction won't be accepted again, as 
 ```typescript
 const spendTx = psbt.extractTransaction();
 const spendTxPushResult = await(
-  await fetch(`${EXPLORER}/api/tx`, { method: 'POST', body: spendTx.toHex() })
+  await fetch(`${ESPLORA_API}/tx`, { method: 'POST', body: spendTx.toHex() })
 ).text();
 ```
 

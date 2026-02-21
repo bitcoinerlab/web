@@ -26,6 +26,13 @@ const Modules = () => (
                 All the modules listed below have been implemented and are
                 available for use:
               </p>
+              <p>
+                The current stack is aligned with the modern BitcoinJS ecosystem
+                (`bitcoinjs-lib` v7), which means monetary values are handled as
+                `bigint` and binary data uses `Uint8Array` semantics. It also
+                includes full Taproot/Tapscript support across descriptors,
+                discovery, explorer, coin selection and miniscript tooling.
+              </p>
 
               <ul>
                 <li>
